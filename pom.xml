@@ -8,7 +8,7 @@
     <artifactId>generic-master</artifactId>
     <version>0.2.2</version>
   </parent>
-  <groupId>jp.xet.uncommons.mirage</groupId>
+  <groupId>jp.xet.uncommons</groupId>
   <artifactId>uncommons-mirage</artifactId>
   <version>1.0-SNAPSHOT</version>
   <inceptionYear>2011</inceptionYear>
@@ -19,13 +19,33 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
+  <scm>
+    <url>scm:git:git@github.com:dai0304/uncommons-mirage.git</url>
+    <connection>scm:git:git@github.com:dai0304/uncommons-mirage.git</connection>
+    <developerConnection>scm:git:git@github.com:dai0304/uncommons-mirage.git</developerConnection>
+  </scm>
+  <build>
+   <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-ssh</artifactId>
+        <version>1.0</version>
+      </extension>
+    </extensions>
+  </build>
   <dependencies>
     <!-- TEST DEPENDENCIES -->
     <dependency>
       <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
+      <artifactId>junit-dep</artifactId>
       <version>4.10</version>
       <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.hamcrest</groupId>
+          <artifactId>hamcrest-core</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.hamcrest</groupId>
@@ -164,6 +184,20 @@
       <url>http://maven.jiemamy.org/release</url>
     </repository>
   </repositories>
+  <distributionManagement>
+    <repository>
+      <id>maven.xet.jp</id>
+      <url>scp://maven.xet.jp/var/www/maven.xet.jp/release</url>
+    </repository>
+    <snapshotRepository>
+      <id>maven.xet.jp</id>
+      <url>scp://maven.xet.jp/var/www/maven.xet.jp/snapshot</url>
+    </snapshotRepository>
+    <site>
+      <id>maven.xet.jp</id>
+      <url>scp://maven.xet.jp/var/www/maven.xet.jp/site/${project.artifactId}/${project.version}</url>
+    </site>
+  </distributionManagement>
   <properties>
     <slf4j-version>1.6.2</slf4j-version>
     <logback-version>0.9.30</logback-version>
