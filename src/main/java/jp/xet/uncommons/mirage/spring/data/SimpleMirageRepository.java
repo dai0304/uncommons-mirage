@@ -25,7 +25,6 @@ import java.util.Map;
 
 import jp.sf.amateras.mirage.IterationCallback;
 import jp.sf.amateras.mirage.SqlManager;
-import jp.sf.amateras.mirage.annotation.Table;
 import jp.sf.amateras.mirage.exception.SQLRuntimeException;
 import jp.sf.amateras.mirage.naming.NameConverter;
 import jp.sf.amateras.mirage.util.MirageUtil;
@@ -306,12 +305,6 @@ public abstract class SimpleMirageRepository<T, ID extends Serializable> impleme
 	@SuppressWarnings("javadoc")
 	protected SqlManager getSqlManager() {
 		return sqlManager;
-	}
-	
-	@SuppressWarnings("javadoc")
-	protected String getTableName() {
-		Table table = entityClass.getAnnotation(Table.class);
-		return table.name();
 	}
 	
 	@SuppressWarnings("javadoc")
