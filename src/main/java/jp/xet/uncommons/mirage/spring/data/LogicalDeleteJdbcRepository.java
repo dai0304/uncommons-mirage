@@ -43,6 +43,14 @@ import org.springframework.data.repository.NoRepositoryBean;
 public interface LogicalDeleteJdbcRepository<T> extends JdbcRepository<T, Long> {
 	
 	/**
+	 * {@inheritDoc}
+	 * 
+	 * <p>IDに負数を与えた場合は何もしない。</p>
+	 */
+	@Override
+	void delete(Long id);
+	
+	/**
 	 * Deletes the given entities.
 	 *
 	 * @param entities entities to delete
@@ -83,6 +91,8 @@ public interface LogicalDeleteJdbcRepository<T> extends JdbcRepository<T, Long> 
 	
 	/**
 	 * 論理削除したエンティティを復活させる。
+	 * 
+	 * <p>IDに正数を与えた場合は何もしない。</p>
 	 * 
 	 * @param id エンティティID（負数）
 	 * @since 1.0

@@ -84,7 +84,7 @@ public abstract class LogicalDeleteMirageRepository<T> extends SimpleMirageRepos
 	
 	@Override
 	public void revert(Long id) {
-		if (id > 0) {
+		if (id < 0) {
 			sqlManager.executeUpdate(pathOf("baseLogicalDelete.sql"), createParams(id));
 		}
 	}
