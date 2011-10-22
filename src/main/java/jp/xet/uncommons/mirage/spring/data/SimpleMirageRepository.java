@@ -38,7 +38,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.util.Assert;
 
 /**
- * TODO for daisuke
+ * Mirageフレームワークを利用した {@link JdbcRepository} の実装クラス。
  * 
  * @param <T> the domain type the repository manages
  * @param <ID> the type of the id of the entity the repository manages
@@ -54,6 +54,13 @@ public abstract class SimpleMirageRepository<T, ID extends Serializable> impleme
 	private static final String PATH_BASE = "META-INF/";
 	
 	
+	/**
+	 * SQLファイル名をクラスパス上におけるパス名に変換する。
+	 * 
+	 * @param filename SQLファイル名
+	 * @return パス名
+	 * @since 1.0
+	 */
 	protected static String pathOf(String filename) {
 		return PATH_BASE + filename;
 	}
@@ -139,7 +146,6 @@ public abstract class SimpleMirageRepository<T, ID extends Serializable> impleme
 	
 	@Override
 	public T findOne(ID id) {
-//		return sqlManager.getSingleResult(entityClass, pathOf("baseSelect.sql"), createParams(id));
 		return sqlManager.getSingleResult(entityClass, pathOf("baseSelectWithDeleted.sql"), createParams(id));
 	}
 	
@@ -165,7 +171,7 @@ public abstract class SimpleMirageRepository<T, ID extends Serializable> impleme
 		} catch (SQLRuntimeException e) {
 			throw new DataIntegrityViolationException("", e);
 		}
-		return entity; // findOne(getId(entity));
+		return entity;
 	}
 	
 	@SuppressWarnings("javadoc")

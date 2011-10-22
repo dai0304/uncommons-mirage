@@ -17,8 +17,9 @@
 package jp.xet.uncommons.mirage.spring.data;
 
 /**
- * TODO for daisuke
+ * Mirageフレームワークを利用した {@link LogicalDeleteJdbcRepository} の実装クラス。
  * 
+ * @param <T> the domain type the repository manages
  * @since 1.0
  * @version $Id$
  * @author daisuke
@@ -40,8 +41,6 @@ public abstract class LogicalDeleteMirageRepository<T> extends SimpleMirageRepos
 	public void delete(Long id) {
 		if (id > 0) {
 			sqlManager.executeUpdate(pathOf("baseLogicalDelete.sql"), createParams(id));
-		} else {
-			// TODO
 		}
 	}
 	
@@ -50,11 +49,11 @@ public abstract class LogicalDeleteMirageRepository<T> extends SimpleMirageRepos
 		sqlManager.executeUpdate(pathOf("baseLogicalDelete.sql"), createParams(getId(entity)));
 	}
 	
-	@Override
-	public void deleteInBatch(Iterable<T> entities) {
-		// TODO
-		super.deleteInBatch(entities);
-	}
+//	@Override
+//	public void deleteInBatch(Iterable<T> entities) {
+//		// TODO
+//		super.deleteInBatch(entities);
+//	}
 	
 	@Override
 	@SuppressWarnings("unchecked")
@@ -86,8 +85,6 @@ public abstract class LogicalDeleteMirageRepository<T> extends SimpleMirageRepos
 	@Override
 	public void revert(Long id) {
 		if (id > 0) {
-			// TODO
-		} else {
 			sqlManager.executeUpdate(pathOf("baseLogicalDelete.sql"), createParams(id));
 		}
 	}
