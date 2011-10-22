@@ -57,9 +57,9 @@ public class MySpringConnectionProvider implements ConnectionProvider, Initializ
 				(ConnectionHolder) TransactionSynchronizationManager.getResource(transactionManager.getDataSource());
 		
 		if (conHolder != null) {
-			logger.warn("connection holder is null...");
 			return conHolder.getConnection();
 		} else {
+			logger.warn("connection holder is null...");
 			try {
 				return transactionManager.getDataSource().getConnection();
 			} catch (SQLException e) {
