@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 datemplatecopy.
+ * Copyright 2011 Daisuke Miyamoto.
  * Created on 2011/10/21
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
