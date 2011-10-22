@@ -16,29 +16,79 @@
  */
 package jp.xet.uncommons.mirage.spring.data;
 
-import org.springframework.data.repository.NoRepositoryBean;
-
 /**
  * TODO for daisuke
  * 
- * @param <T> the domain type the repository manages
  * @since 1.0
  * @version $Id$
  * @author daisuke
  */
-@NoRepositoryBean
-public interface LogicalDeleteMirageRepository<T> extends MirageRepository<T, Long> {
+public abstract class LogicalDeleteMirageRepository<T> extends SimpleMirageRepository<T, Long> implements
+		LogicalDeleteJdbcRepository<T> {
 	
-	void physicalDelete(Iterable<? extends T> entities);
+	/**
+	 * インスタンスを生成する。
+	 * 
+	 * @param entityClass エンティティの型
+	 * @throws IllegalArgumentException 引数に{@code null}を与えた場合
+	 */
+	public LogicalDeleteMirageRepository(Class<T> entityClass) {
+		super(entityClass);
+	}
 	
-	void physicalDelete(Long id);
+	@Override
+	public void delete(Long id) {
+		if (id > 0) {
+			sqlManager.executeUpdate(pathOf("baseLogicalDelete.sql"), createParams(id));
+		} else {
+			// TODO
+		}
+	}
 	
-	void physicalDelete(T entity);
+	@Override
+	public void delete(T entity) {
+		sqlManager.executeUpdate(pathOf("baseLogicalDelete.sql"), createParams(getId(entity)));
+	}
 	
-	void physicalDeleteAll();
+	@Override
+	public void deleteInBatch(Iterable<T> entities) {
+		// TODO
+		super.deleteInBatch(entities);
+	}
 	
-	void physicalDeleteInBatch(Iterable<T> entities);
+	@Override
+	@SuppressWarnings("unchecked")
+	public void physicalDelete(Iterable<? extends T> entities) {
+		sqlManager.deleteBatch(entities);
+	}
 	
-	void revert(Long id);
+	@Override
+	public void physicalDelete(Long id) {
+		sqlManager.deleteEntity(findOne(id));
+	}
 	
+	@Override
+	public void physicalDelete(T entity) {
+		sqlManager.deleteEntity(entity);
+	}
+	
+	@Override
+	public void physicalDeleteAll() {
+		sqlManager.deleteBatch(findAll());
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public void physicalDeleteInBatch(Iterable<T> entities) {
+		sqlManager.deleteBatch(entities);
+	}
+	
+	@Override
+	public void revert(Long id) {
+		if (id > 0) {
+			// TODO
+		} else {
+			sqlManager.executeUpdate(pathOf("baseLogicalDelete.sql"), createParams(id));
+		}
+	}
 }

@@ -16,11 +16,14 @@
  */
 package jp.xet.uncommons.mirage;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import jp.sf.amateras.mirage.naming.DefaultNameConverter;
 import jp.sf.amateras.mirage.naming.NameConverter;
 
 /**
- * TODO for daisuke
+ * RoRのように、エンティティ名は単数形で扱い、テーブル名を複数形で扱う規約の {@link NameConverter} 実装クラス。
  * 
  * @since 1.0
  * @version $Id: RailsLikeNameConverter.java 161 2011-10-21 10:08:21Z daisuke $
@@ -30,6 +33,8 @@ public class RailsLikeNameConverter implements NameConverter {
 	
 	private static final NameConverter DNC = new DefaultNameConverter();
 	
+	static final Map<String, String> PLURALS = new HashMap<String, String>();
+	
 	
 	@Override
 	public String columnToProperty(String columnName) {
@@ -38,7 +43,8 @@ public class RailsLikeNameConverter implements NameConverter {
 	
 	@Override
 	public String entityToTable(String entityName) {
-		return DNC.entityToTable(entityName) + "S";
+		String pluralized = Inflection.pluralize(entityName);
+		return DNC.entityToTable(pluralized);
 	}
 	
 	@Override

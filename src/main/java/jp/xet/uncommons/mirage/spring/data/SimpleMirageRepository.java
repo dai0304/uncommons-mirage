@@ -46,7 +46,7 @@ import org.springframework.util.Assert;
  * @version $Id: SimpleMirageRepository.java 161 2011-10-21 10:08:21Z daisuke $
  * @author daisuke
  */
-public abstract class SimpleMirageRepository<T, ID extends Serializable> implements MirageRepository<T, ID> {
+public abstract class SimpleMirageRepository<T, ID extends Serializable> implements JdbcRepository<T, ID> {
 	
 	@Autowired
 	NameConverter nameConverter;
@@ -68,7 +68,8 @@ public abstract class SimpleMirageRepository<T, ID extends Serializable> impleme
 	/**
 	 * インスタンスを生成する。
 	 * 
-	 * @param entityClass 
+	 * @param entityClass エンティティの型
+	 * @throws IllegalArgumentException 引数に{@code null}を与えた場合
 	 */
 	public SimpleMirageRepository(Class<T> entityClass) {
 		Assert.notNull(entityClass);
@@ -141,8 +142,6 @@ public abstract class SimpleMirageRepository<T, ID extends Serializable> impleme
 //		return sqlManager.getSingleResult(entityClass, pathOf("baseSelect.sql"), createParams(id));
 		return sqlManager.getSingleResult(entityClass, pathOf("baseSelectWithDeleted.sql"), createParams(id));
 	}
-	
-	public abstract ID getId(T entity);
 	
 	@Override
 	public List<T> save(Iterable<? extends T> entities) {

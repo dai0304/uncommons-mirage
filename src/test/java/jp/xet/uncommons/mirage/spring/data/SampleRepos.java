@@ -17,10 +17,11 @@
 package jp.xet.uncommons.mirage.spring.data;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.util.Assert;
 
 @Repository
 @SuppressWarnings("javadoc")
-public class SampleRepos extends SimpleLogicalDeleteMirageRepository<Sample> {
+public class SampleRepos extends LogicalDeleteMirageRepository<Sample> {
 	
 	public SampleRepos() {
 		super(Sample.class);
@@ -28,6 +29,7 @@ public class SampleRepos extends SimpleLogicalDeleteMirageRepository<Sample> {
 	
 	@Override
 	public Long getId(Sample entity) {
+		Assert.notNull(entity);
 		return entity.getId();
 	}
 }

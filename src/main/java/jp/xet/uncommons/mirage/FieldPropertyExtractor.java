@@ -23,7 +23,7 @@ import java.util.Map;
 import jp.sf.amateras.mirage.bean.PropertyExtractor;
 
 /**
- * TODO for daisuke
+ * フィールドの型と名前をプロパティとして認識する {@link PropertyExtractor} 実装クラス。
  * 
  * @since 1.0
  * @version $Id: FieldPropertyExtractor.java 160 2011-10-21 09:49:56Z daisuke $

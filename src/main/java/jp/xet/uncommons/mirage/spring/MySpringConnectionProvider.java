@@ -19,6 +19,7 @@ package jp.xet.uncommons.mirage.spring;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import jp.sf.amateras.mirage.integration.spring.SpringConnectionProvider;
 import jp.sf.amateras.mirage.provider.ConnectionProvider;
 
 import org.slf4j.Logger;
@@ -30,7 +31,8 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import org.springframework.util.Assert;
 
 /**
- * TODO for daisuke
+ * {@link SpringConnectionProvider}実装内で、{@link ConnectionHolder}が{@code null}で返って来て、NPE落ちすることがあるので
+ * それを応急処置として回避するためのダメクラス。何がおかしいんじゃ…。
  * 
  * @since 1.0
  * @version $Id: MySpringConnectionProvider.java 160 2011-10-21 09:49:56Z daisuke $
@@ -55,7 +57,7 @@ public class MySpringConnectionProvider implements ConnectionProvider, Initializ
 				(ConnectionHolder) TransactionSynchronizationManager.getResource(transactionManager.getDataSource());
 		
 		if (conHolder != null) {
-			logger.warn("connection holder is null... why?");
+			logger.warn("connection holder is null...");
 			return conHolder.getConnection();
 		} else {
 			try {
@@ -67,6 +69,7 @@ public class MySpringConnectionProvider implements ConnectionProvider, Initializ
 		return null;
 	}
 	
+	@SuppressWarnings("javadoc")
 	public void setTransactionManager(DataSourceTransactionManager transactionManager) {
 		this.transactionManager = transactionManager;
 	}

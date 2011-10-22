@@ -19,10 +19,10 @@ package jp.xet.uncommons.mirage;
 import jp.sf.amateras.mirage.bean.BeanDescFactory;
 
 /**
- * TODO for daisuke
+ * {@link BeanDescFactory}に{@link FieldPropertyExtractor}を設定するタイミングが掴めなかったので強引に…orz
  * 
  * @since 1.0
- * @version $Id: Initializer.java 160 2011-10-21 09:49:56Z daisuke $
+ * @version $Id: FieldPropertyExtractorInitializer.java 160 2011-10-21 09:49:56Z daisuke $
  * @author daisuke
  */
 public class FieldPropertyExtractorInitializer {
