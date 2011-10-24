@@ -73,7 +73,7 @@ public interface JdbcRepository<T, ID extends Serializable> extends PagingAndSor
 	void deleteAll();
 	
 	/**
-	 * TODO
+	 * エンティティのバッチ削除を行う。
 	 * 
 	 * @param entities 削除するエンティティ
 	 * @throws DataIntegrityViolationException 整合性違反が発生した場合

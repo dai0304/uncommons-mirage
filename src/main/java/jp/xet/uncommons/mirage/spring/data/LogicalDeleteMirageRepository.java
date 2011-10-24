@@ -49,11 +49,11 @@ public abstract class LogicalDeleteMirageRepository<T> extends SimpleMirageRepos
 		sqlManager.executeUpdate(pathOf("baseLogicalDelete.sql"), createParams(getId(entity)));
 	}
 	
-//	@Override
-//	public void deleteInBatch(Iterable<T> entities) {
-//		// TODO
-//		super.deleteInBatch(entities);
-//	}
+	@Override
+	public void deleteInBatch(Iterable<T> entities) {
+		// THINK これでいいのか…？
+		delete(entities);
+	}
 	
 	@Override
 	@SuppressWarnings("unchecked")

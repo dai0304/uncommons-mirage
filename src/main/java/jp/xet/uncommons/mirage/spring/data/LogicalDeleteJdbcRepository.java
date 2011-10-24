@@ -38,6 +38,7 @@ import org.springframework.data.repository.NoRepositoryBean;
  * @since 1.0
  * @version $Id$
  * @author daisuke
+ * @see <a href="http://bit.ly/qQtt9T">削除フラグのはなし</a>
  */
 @NoRepositoryBean
 public interface LogicalDeleteJdbcRepository<T> extends JdbcRepository<T, Long> {
@@ -81,7 +82,7 @@ public interface LogicalDeleteJdbcRepository<T> extends JdbcRepository<T, Long> 
 	void physicalDeleteAll();
 	
 	/**
-	 * TODO
+	 * エンティティのバッチ物理削除を行う。
 	 * 
 	 * @param entities 削除するエンティティ
 	 * @throws DataIntegrityViolationException 整合性違反が発生した場合
