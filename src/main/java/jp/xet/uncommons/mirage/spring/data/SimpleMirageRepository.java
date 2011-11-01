@@ -30,12 +30,14 @@ import jp.sf.amateras.mirage.exception.SQLRuntimeException;
 import jp.sf.amateras.mirage.naming.NameConverter;
 import jp.sf.amateras.mirage.util.MirageUtil;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.util.Assert;
 
 /**
@@ -134,8 +136,7 @@ public abstract class SimpleMirageRepository<T, ID extends Serializable> impleme
 		}
 		
 		Map<String, Object> params = createParams();
-		params.put("offset", pageable.getOffset());
-		params.put("size", pageable.getPageSize());
+		addPageParam(pageable, params);
 		List<T> result = sqlManager.getResultList(entityClass, pathOf("baseSelect.sql"), params);
 		return new PageImpl<T>(result, pageable, count());
 	}
@@ -216,22 +217,37 @@ public abstract class SimpleMirageRepository<T, ID extends Serializable> impleme
 	
 	@SuppressWarnings("javadoc")
 	protected Map<String, Object> createParams() {
-		return createParams((ID) null);
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("table", MirageUtil.getTableName(entityClass, nameConverter));
+		return params;
 	}
 	
 	@SuppressWarnings("javadoc")
 	protected Map<String, Object> createParams(ID id) {
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("table", MirageUtil.getTableName(entityClass, nameConverter));
-		params.put("id", id);
+		Map<String, Object> params = createParams();
+		addIdParam(id, params);
 		return params;
 	}
 	
 	@SuppressWarnings("javadoc")
 	protected Map<String, Object> createParams(Pageable pageable) {
 		Map<String, Object> params = createParams();
-		params.put("offset", pageable.getOffset());
-		params.put("size", pageable.getPageSize());
+		addPageParam(pageable, params);
+		return params;
+	}
+	
+	@SuppressWarnings("javadoc")
+	protected Map<String, Object> createParams(Sort sort) {
+		Map<String, Object> params = createParams();
+		addSortParam(sort, params);
+		return params;
+	}
+	
+	@SuppressWarnings("javadoc")
+	protected Map<String, Object> createParams(Sort sort, Pageable pageable) {
+		Map<String, Object> params = createParams();
+		addSortParam(sort, params);
+		addPageParam(pageable, params);
 		return params;
 	}
 	
@@ -378,5 +394,25 @@ public abstract class SimpleMirageRepository<T, ID extends Serializable> impleme
 	@SuppressWarnings("javadoc")
 	protected int updateEntity(Object entity) {
 		return sqlManager.updateEntity(entity);
+	}
+	
+	private void addIdParam(ID id, Map<String, Object> params) {
+		params.put("id", id);
+	}
+	
+	private void addPageParam(Pageable pageable, Map<String, Object> params) {
+		params.put("offset", pageable.getOffset());
+		params.put("size", pageable.getPageSize());
+	}
+	
+	private void addSortParam(Sort sort, Map<String, Object> params) {
+		ArrayList<String> list = new ArrayList<String>();
+		for (Order order : sort) {
+			String orderDefinition = String.format("%s %s", order.getProperty(), order.getDirection()).trim();
+			if (orderDefinition.isEmpty() == false) {
+				list.add(orderDefinition);
+			}
+		}
+		params.put("order", StringUtils.join(list.toArray(new String[list.size()]), ", "));
 	}
 }
