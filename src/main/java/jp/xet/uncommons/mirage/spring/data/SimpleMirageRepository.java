@@ -18,6 +18,7 @@ package jp.xet.uncommons.mirage.spring.data;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -151,10 +152,16 @@ public abstract class SimpleMirageRepository<T, ID extends Serializable> impleme
 	
 	@Override
 	public List<T> save(Iterable<? extends T> entities) {
+		if (entities == null) {
+			return Collections.emptyList();
+		}
 		List<T> list = new ArrayList<T>();
 		Iterator<? extends T> iterator = entities.iterator();
 		while (iterator.hasNext()) {
-			list.add(iterator.next());
+			T entity = iterator.next();
+			if (entity != null) {
+				list.add(entity);
+			}
 		}
 		sqlManager.insertBatch(list);
 		return list;
@@ -162,6 +169,9 @@ public abstract class SimpleMirageRepository<T, ID extends Serializable> impleme
 	
 	@Override
 	public T save(T entity) {
+		if (entity == null) {
+			return null;
+		}
 		try {
 			if (exists(getId(entity))) {
 				sqlManager.updateEntity(entity);
@@ -206,7 +216,7 @@ public abstract class SimpleMirageRepository<T, ID extends Serializable> impleme
 	
 	@SuppressWarnings("javadoc")
 	protected Map<String, Object> createParams() {
-		return createParams(null);
+		return createParams((ID) null);
 	}
 	
 	@SuppressWarnings("javadoc")
@@ -214,6 +224,14 @@ public abstract class SimpleMirageRepository<T, ID extends Serializable> impleme
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("table", MirageUtil.getTableName(entityClass, nameConverter));
 		params.put("id", id);
+		return params;
+	}
+	
+	@SuppressWarnings("javadoc")
+	protected Map<String, Object> createParams(Pageable pageable) {
+		Map<String, Object> params = createParams();
+		params.put("offset", pageable.getOffset());
+		params.put("size", pageable.getPageSize());
 		return params;
 	}
 	

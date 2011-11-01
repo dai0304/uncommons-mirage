@@ -36,7 +36,12 @@ public class EnumStringValueType implements ValueType {
 	
 	@SuppressWarnings("unchecked")
 	private static <T extends Enum<T>>T toEnum(Class<?> type, String name) {
-		return Enum.valueOf((Class<T>) type, name);
+		try {
+			return Enum.valueOf((Class<T>) type, name);
+		} catch (IllegalArgumentException e) {
+			// TODO 仕様をきちんと考える
+			return (T) type.getEnumConstants()[0];
+		}
 	}
 	
 	@Override
