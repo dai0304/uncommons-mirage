@@ -136,7 +136,7 @@ public abstract class SimpleMirageRepository<T, ID extends Serializable> impleme
 		}
 		
 		Map<String, Object> params = createParams();
-		addPageParam(pageable, params);
+		addPageParam(params, pageable);
 		List<T> result = sqlManager.getResultList(entityClass, pathOf("baseSelect.sql"), params);
 		return new PageImpl<T>(result, pageable, count());
 	}
@@ -219,35 +219,36 @@ public abstract class SimpleMirageRepository<T, ID extends Serializable> impleme
 	protected Map<String, Object> createParams() {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("table", MirageUtil.getTableName(entityClass, nameConverter));
+		params.put("id", null); // 何故これが要るのだろう。無いとコケる
 		return params;
 	}
 	
 	@SuppressWarnings("javadoc")
 	protected Map<String, Object> createParams(ID id) {
 		Map<String, Object> params = createParams();
-		addIdParam(id, params);
+		addIdParam(params, id);
 		return params;
 	}
 	
 	@SuppressWarnings("javadoc")
 	protected Map<String, Object> createParams(Pageable pageable) {
 		Map<String, Object> params = createParams();
-		addPageParam(pageable, params);
+		addPageParam(params, pageable);
 		return params;
 	}
 	
 	@SuppressWarnings("javadoc")
 	protected Map<String, Object> createParams(Sort sort) {
 		Map<String, Object> params = createParams();
-		addSortParam(sort, params);
+		addSortParam(params, sort);
 		return params;
 	}
 	
 	@SuppressWarnings("javadoc")
 	protected Map<String, Object> createParams(Sort sort, Pageable pageable) {
 		Map<String, Object> params = createParams();
-		addSortParam(sort, params);
-		addPageParam(pageable, params);
+		addSortParam(params, sort);
+		addPageParam(params, pageable);
 		return params;
 	}
 	
@@ -396,16 +397,16 @@ public abstract class SimpleMirageRepository<T, ID extends Serializable> impleme
 		return sqlManager.updateEntity(entity);
 	}
 	
-	private void addIdParam(ID id, Map<String, Object> params) {
+	private void addIdParam(Map<String, Object> params, ID id) {
 		params.put("id", id);
 	}
 	
-	private void addPageParam(Pageable pageable, Map<String, Object> params) {
+	private void addPageParam(Map<String, Object> params, Pageable pageable) {
 		params.put("offset", pageable.getOffset());
 		params.put("size", pageable.getPageSize());
 	}
 	
-	private void addSortParam(Sort sort, Map<String, Object> params) {
+	private void addSortParam(Map<String, Object> params, Sort sort) {
 		ArrayList<String> list = new ArrayList<String>();
 		for (Order order : sort) {
 			String orderDefinition = String.format("%s %s", order.getProperty(), order.getDirection()).trim();
@@ -413,6 +414,8 @@ public abstract class SimpleMirageRepository<T, ID extends Serializable> impleme
 				list.add(orderDefinition);
 			}
 		}
-		params.put("order", StringUtils.join(list.toArray(new String[list.size()]), ", "));
+		if (list.isEmpty() == false) {
+			params.put("order", StringUtils.join(list.toArray(new String[list.size()]), ", "));
+		}
 	}
 }
