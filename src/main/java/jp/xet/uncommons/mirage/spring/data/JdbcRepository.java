@@ -25,7 +25,7 @@ import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 /**
- * 
+ * TODO
  * 
  * @param <E> the domain type the repository manages
  * @param <ID> the type of the id of the entity the repository manages
@@ -35,6 +35,15 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  */
 @NoRepositoryBean
 public interface JdbcRepository<E, ID extends Serializable> extends PagingAndSortingRepository<E, ID> {
+	
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @throws DataIntegrityViolationException 整合性違反が発生した場合
+	 * @since 1.0
+	 */
+	@Override
+	void delete(E entity);
 	
 	/**
 	 * {@inheritDoc}
@@ -53,15 +62,6 @@ public interface JdbcRepository<E, ID extends Serializable> extends PagingAndSor
 	 */
 	@Override
 	void delete(Iterable<? extends E> entities);
-	
-	/**
-	 * {@inheritDoc}
-	 * 
-	 * @throws DataIntegrityViolationException 整合性違反が発生した場合
-	 * @since 1.0
-	 */
-	@Override
-	void delete(E entity);
 	
 	/**
 	 * {@inheritDoc}
@@ -104,7 +104,7 @@ public interface JdbcRepository<E, ID extends Serializable> extends PagingAndSor
 	 * @since 1.0
 	 */
 	@Override
-	List<E> save(Iterable<? extends E> entities);
+	E save(E entity);
 	
 	/**
 	 * {@inheritDoc}
@@ -113,5 +113,5 @@ public interface JdbcRepository<E, ID extends Serializable> extends PagingAndSor
 	 * @since 1.0
 	 */
 	@Override
-	E save(E entity);
+	List<E> save(Iterable<? extends E> entities);
 }

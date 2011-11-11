@@ -24,7 +24,7 @@ package jp.xet.uncommons.mirage.spring.data;
  * @version $Id$
  * @author daisuke
  */
-public abstract class LogicalDeleteMirageRepository<E extends Identifiable> extends SimpleMirageRepository<E, Long>
+public abstract class LogicalDeleteMirageRepository<E extends Identifiable> extends IdentifiableMirageRepository<E>
 		implements LogicalDeleteJdbcRepository<E> {
 	
 	/**
