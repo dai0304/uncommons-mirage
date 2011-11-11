@@ -34,14 +34,14 @@ import org.springframework.data.repository.NoRepositoryBean;
  * <p>テーブル設計においては、主キーの値がUPDATEされることがあるため、このリポジトリに対応するテーブルを参照する外部キーについて、
  * その{@code ON UPDATE}のreferential actionは{@code CASCADE}である必要がある。</p>
  * 
- * @param <T> the domain type the repository manages
+ * @param <E> the domain type the repository manages
  * @since 1.0
  * @version $Id$
  * @author daisuke
  * @see <a href="http://bit.ly/qQtt9T">削除フラグのはなし</a>
  */
 @NoRepositoryBean
-public interface LogicalDeleteJdbcRepository<T> extends JdbcRepository<T, Long> {
+public interface LogicalDeleteJdbcRepository<E extends Identifiable> extends JdbcRepository<E, Long> {
 	
 	/**
 	 * {@inheritDoc}
@@ -52,12 +52,20 @@ public interface LogicalDeleteJdbcRepository<T> extends JdbcRepository<T, Long> 
 	void delete(Long id);
 	
 	/**
+	 * Deletes a given entity.
+	 *
+	 * @param entity entity to delete
+	 * @since 1.0
+	 */
+	void physicalDelete(E entity);
+	
+	/**
 	 * Deletes the given entities.
 	 *
 	 * @param entities entities to delete
 	 * @since 1.0
 	 */
-	void physicalDelete(Iterable<? extends T> entities);
+	void physicalDelete(Iterable<? extends E> entities);
 	
 	/**
 	 * Deletes the entity with the given id.
@@ -68,15 +76,8 @@ public interface LogicalDeleteJdbcRepository<T> extends JdbcRepository<T, Long> 
 	void physicalDelete(Long id);
 	
 	/**
-	 * Deletes a given entity.
-	 *
-	 * @param entity entity to delete
-	 * @since 1.0
-	 */
-	void physicalDelete(T entity);
-	
-	/**
 	 * Deletes all entities managed by the repository.
+	 * 
 	 * @since 1.0
 	 */
 	void physicalDeleteAll();
@@ -88,7 +89,7 @@ public interface LogicalDeleteJdbcRepository<T> extends JdbcRepository<T, Long> 
 	 * @throws DataIntegrityViolationException 整合性違反が発生した場合
 	 * @since 1.0
 	 */
-	void physicalDeleteInBatch(Iterable<T> entities);
+	void physicalDeleteInBatch(Iterable<E> entities);
 	
 	/**
 	 * 論理削除したエンティティを復活させる。

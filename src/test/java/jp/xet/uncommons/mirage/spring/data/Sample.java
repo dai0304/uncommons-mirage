@@ -22,7 +22,7 @@ import jp.sf.amateras.mirage.annotation.PrimaryKey;
 import jp.sf.amateras.mirage.annotation.PrimaryKey.GenerationType;
 
 @SuppressWarnings("javadoc")
-public class Sample {
+public class Sample implements Identifiable {
 	
 	@PrimaryKey(generationType = GenerationType.IDENTITY)
 	private long id;
@@ -37,6 +37,7 @@ public class Sample {
 		this.timeZone = timeZone.getID();
 	}
 	
+	@Override
 	public long getId() {
 		return id;
 	}

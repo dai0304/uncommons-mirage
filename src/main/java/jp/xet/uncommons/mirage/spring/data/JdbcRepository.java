@@ -27,14 +27,14 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 /**
  * 
  * 
- * @param <T> the domain type the repository manages
+ * @param <E> the domain type the repository manages
  * @param <ID> the type of the id of the entity the repository manages
  * @since 1.0
  * @version $Id: MirageRepository.java 161 2011-10-21 10:08:21Z daisuke $
  * @author daisuke
  */
 @NoRepositoryBean
-public interface JdbcRepository<T, ID extends Serializable> extends PagingAndSortingRepository<T, ID> {
+public interface JdbcRepository<E, ID extends Serializable> extends PagingAndSortingRepository<E, ID> {
 	
 	/**
 	 * {@inheritDoc}
@@ -52,7 +52,7 @@ public interface JdbcRepository<T, ID extends Serializable> extends PagingAndSor
 	 * @since 1.0
 	 */
 	@Override
-	void delete(Iterable<? extends T> entities);
+	void delete(Iterable<? extends E> entities);
 	
 	/**
 	 * {@inheritDoc}
@@ -61,7 +61,7 @@ public interface JdbcRepository<T, ID extends Serializable> extends PagingAndSor
 	 * @since 1.0
 	 */
 	@Override
-	void delete(T entity);
+	void delete(E entity);
 	
 	/**
 	 * {@inheritDoc}
@@ -79,13 +79,13 @@ public interface JdbcRepository<T, ID extends Serializable> extends PagingAndSor
 	 * @throws DataIntegrityViolationException 整合性違反が発生した場合
 	 * @since 1.0
 	 */
-	void deleteInBatch(Iterable<T> entities);
+	void deleteInBatch(Iterable<E> entities);
 	
 	@Override
-	List<T> findAll();
+	List<E> findAll();
 	
 	@Override
-	List<T> findAll(Sort sort);
+	List<E> findAll(Sort sort);
 	
 	/**
 	 * 指定したエンティティの識別子(ID)を返す。
@@ -95,7 +95,7 @@ public interface JdbcRepository<T, ID extends Serializable> extends PagingAndSor
 	 * @throws IllegalArgumentException 引数に{@code null}を与えた場合
 	 * @since 1.0
 	 */
-	ID getId(T entity);
+	ID getId(E entity);
 	
 	/**
 	 * {@inheritDoc}
@@ -104,7 +104,7 @@ public interface JdbcRepository<T, ID extends Serializable> extends PagingAndSor
 	 * @since 1.0
 	 */
 	@Override
-	List<T> save(Iterable<? extends T> entities);
+	List<E> save(Iterable<? extends E> entities);
 	
 	/**
 	 * {@inheritDoc}
@@ -113,5 +113,5 @@ public interface JdbcRepository<T, ID extends Serializable> extends PagingAndSor
 	 * @since 1.0
 	 */
 	@Override
-	T save(T entity);
+	E save(E entity);
 }

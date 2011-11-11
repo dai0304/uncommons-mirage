@@ -43,13 +43,13 @@ import org.springframework.util.Assert;
 /**
  * Mirageフレームワークを利用した {@link JdbcRepository} の実装クラス。
  * 
- * @param <T> the domain type the repository manages
+ * @param <E> the domain type the repository manages
  * @param <ID> the type of the id of the entity the repository manages
  * @since 1.0
  * @version $Id: SimpleMirageRepository.java 161 2011-10-21 10:08:21Z daisuke $
  * @author daisuke
  */
-public abstract class SimpleMirageRepository<T, ID extends Serializable> implements JdbcRepository<T, ID> {
+public abstract class SimpleMirageRepository<E, ID extends Serializable> implements JdbcRepository<E, ID> {
 	
 	@Autowired
 	NameConverter nameConverter;
@@ -72,7 +72,7 @@ public abstract class SimpleMirageRepository<T, ID extends Serializable> impleme
 	@Autowired
 	SqlManager sqlManager;
 	
-	private final Class<T> entityClass;
+	private final Class<E> entityClass;
 	
 	
 	/**
@@ -81,7 +81,7 @@ public abstract class SimpleMirageRepository<T, ID extends Serializable> impleme
 	 * @param entityClass エンティティの型
 	 * @throws IllegalArgumentException 引数に{@code null}を与えた場合
 	 */
-	public SimpleMirageRepository(Class<T> entityClass) {
+	public SimpleMirageRepository(Class<E> entityClass) {
 		Assert.notNull(entityClass);
 		this.entityClass = entityClass;
 	}
@@ -97,14 +97,14 @@ public abstract class SimpleMirageRepository<T, ID extends Serializable> impleme
 	}
 	
 	@Override
-	public void delete(Iterable<? extends T> entities) {
-		for (T entity : entities) {
+	public void delete(Iterable<? extends E> entities) {
+		for (E entity : entities) {
 			delete(entity);
 		}
 	}
 	
 	@Override
-	public void delete(T entity) {
+	public void delete(E entity) {
 		sqlManager.deleteEntity(entity);
 	}
 	
@@ -115,7 +115,7 @@ public abstract class SimpleMirageRepository<T, ID extends Serializable> impleme
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public void deleteInBatch(Iterable<T> entities) {
+	public void deleteInBatch(Iterable<E> entities) {
 		sqlManager.deleteBatch(entities);
 	}
 	
@@ -125,41 +125,41 @@ public abstract class SimpleMirageRepository<T, ID extends Serializable> impleme
 	}
 	
 	@Override
-	public List<T> findAll() {
+	public List<E> findAll() {
 		return sqlManager.getResultList(entityClass, pathOf("baseSelect.sql"), createParams());
 	}
 	
 	@Override
-	public Page<T> findAll(Pageable pageable) {
+	public Page<E> findAll(Pageable pageable) {
 		if (null == pageable) {
-			return new PageImpl<T>(findAll());
+			return new PageImpl<E>(findAll());
 		}
 		
 		Map<String, Object> params = createParams();
 		addPageParam(params, pageable);
-		List<T> result = sqlManager.getResultList(entityClass, pathOf("baseSelect.sql"), params);
-		return new PageImpl<T>(result, pageable, count());
+		List<E> result = sqlManager.getResultList(entityClass, pathOf("baseSelect.sql"), params);
+		return new PageImpl<E>(result, pageable, count());
 	}
 	
 	@Override
-	public List<T> findAll(Sort sort) {
+	public List<E> findAll(Sort sort) {
 		return sqlManager.getResultList(entityClass, pathOf("baseSelect.sql"), createParams());
 	}
 	
 	@Override
-	public T findOne(ID id) {
+	public E findOne(ID id) {
 		return sqlManager.getSingleResult(entityClass, pathOf("baseSelectWithDeleted.sql"), createParams(id));
 	}
 	
 	@Override
-	public List<T> save(Iterable<? extends T> entities) {
+	public List<E> save(Iterable<? extends E> entities) {
 		if (entities == null) {
 			return Collections.emptyList();
 		}
-		List<T> list = new ArrayList<T>();
-		Iterator<? extends T> iterator = entities.iterator();
+		List<E> list = new ArrayList<E>();
+		Iterator<? extends E> iterator = entities.iterator();
 		while (iterator.hasNext()) {
-			T entity = iterator.next();
+			E entity = iterator.next();
 			if (entity != null) {
 				list.add(entity);
 			}
@@ -169,7 +169,7 @@ public abstract class SimpleMirageRepository<T, ID extends Serializable> impleme
 	}
 	
 	@Override
-	public T save(T entity) {
+	public E save(E entity) {
 		if (entity == null) {
 			return null;
 		}
@@ -186,12 +186,12 @@ public abstract class SimpleMirageRepository<T, ID extends Serializable> impleme
 	}
 	
 	@SuppressWarnings("javadoc")
-	protected T call(Class<T> resultClass, String functionName) {
+	protected E call(Class<E> resultClass, String functionName) {
 		return sqlManager.call(resultClass, functionName);
 	}
 	
 	@SuppressWarnings("javadoc")
-	protected T call(Class<T> resultClass, String functionName, Object param) {
+	protected E call(Class<E> resultClass, String functionName, Object param) {
 		return sqlManager.call(resultClass, functionName, param);
 	}
 	
@@ -206,12 +206,12 @@ public abstract class SimpleMirageRepository<T, ID extends Serializable> impleme
 	}
 	
 	@SuppressWarnings("javadoc")
-	protected List<T> callForList(Class<T> resultClass, String functionName) {
+	protected List<E> callForList(Class<E> resultClass, String functionName) {
 		return sqlManager.callForList(resultClass, functionName);
 	}
 	
 	@SuppressWarnings("javadoc")
-	protected List<T> callForList(Class<T> resultClass, String functionName, Object param) {
+	protected List<E> callForList(Class<E> resultClass, String functionName, Object param) {
 		return sqlManager.callForList(resultClass, functionName, param);
 	}
 	
@@ -253,12 +253,12 @@ public abstract class SimpleMirageRepository<T, ID extends Serializable> impleme
 	}
 	
 	@SuppressWarnings("javadoc")
-	protected int deleteBatch(List<T> entities) {
+	protected int deleteBatch(List<E> entities) {
 		return sqlManager.deleteBatch(entities);
 	}
 	
 	@SuppressWarnings("javadoc")
-	protected int deleteBatch(T... entities) {
+	protected int deleteBatch(E... entities) {
 		return sqlManager.deleteBatch(entities);
 	}
 	
@@ -288,7 +288,7 @@ public abstract class SimpleMirageRepository<T, ID extends Serializable> impleme
 	}
 	
 	@SuppressWarnings("javadoc")
-	protected T findEntity(Object... id) {
+	protected E findEntity(Object... id) {
 		return sqlManager.findEntity(entityClass, id);
 	}
 	
@@ -303,42 +303,42 @@ public abstract class SimpleMirageRepository<T, ID extends Serializable> impleme
 	}
 	
 	@SuppressWarnings("javadoc")
-	protected List<T> getResultList(String sqlPath) {
+	protected List<E> getResultList(String sqlPath) {
 		return sqlManager.getResultList(entityClass, sqlPath);
 	}
 	
 	@SuppressWarnings("javadoc")
-	protected List<T> getResultList(String sqlPath, Object param) {
+	protected List<E> getResultList(String sqlPath, Object param) {
 		return sqlManager.getResultList(entityClass, sqlPath, param);
 	}
 	
 	@SuppressWarnings("javadoc")
-	protected List<T> getResultListBySql(String sql) {
+	protected List<E> getResultListBySql(String sql) {
 		return sqlManager.getResultListBySql(entityClass, sql);
 	}
 	
 	@SuppressWarnings("javadoc")
-	protected List<T> getResultListBySql(String sql, Object... params) {
+	protected List<E> getResultListBySql(String sql, Object... params) {
 		return sqlManager.getResultListBySql(entityClass, sql, params);
 	}
 	
 	@SuppressWarnings("javadoc")
-	protected T getSingleResult(String sqlPath) {
+	protected E getSingleResult(String sqlPath) {
 		return sqlManager.getSingleResult(entityClass, sqlPath);
 	}
 	
 	@SuppressWarnings("javadoc")
-	protected T getSingleResult(String sqlPath, Object param) {
+	protected E getSingleResult(String sqlPath, Object param) {
 		return sqlManager.getSingleResult(entityClass, sqlPath, param);
 	}
 	
 	@SuppressWarnings("javadoc")
-	protected T getSingleResultBySql(String sql) {
+	protected E getSingleResultBySql(String sql) {
 		return sqlManager.getSingleResultBySql(entityClass, sql);
 	}
 	
 	@SuppressWarnings("javadoc")
-	protected T getSingleResultBySql(String sql, Object... params) {
+	protected E getSingleResultBySql(String sql, Object... params) {
 		return sqlManager.getSingleResultBySql(entityClass, sql, params);
 	}
 	
@@ -348,12 +348,12 @@ public abstract class SimpleMirageRepository<T, ID extends Serializable> impleme
 	}
 	
 	@SuppressWarnings("javadoc")
-	protected int insertBatch(List<T> entities) {
+	protected int insertBatch(List<E> entities) {
 		return sqlManager.insertBatch(entities);
 	}
 	
 	@SuppressWarnings("javadoc")
-	protected int insertBatch(T... entities) {
+	protected int insertBatch(E... entities) {
 		return sqlManager.insertBatch(entities);
 	}
 	
@@ -363,32 +363,32 @@ public abstract class SimpleMirageRepository<T, ID extends Serializable> impleme
 	}
 	
 	@SuppressWarnings("javadoc")
-	protected <R>R iterate(IterationCallback<T, R> callback, String sqlPath) {
+	protected <R>R iterate(IterationCallback<E, R> callback, String sqlPath) {
 		return sqlManager.iterate(entityClass, callback, sqlPath);
 	}
 	
 	@SuppressWarnings("javadoc")
-	protected <R>R iterate(IterationCallback<T, R> callback, String sqlPath, Object param) {
+	protected <R>R iterate(IterationCallback<E, R> callback, String sqlPath, Object param) {
 		return sqlManager.iterate(entityClass, callback, sqlPath, param);
 	}
 	
 	@SuppressWarnings("javadoc")
-	protected <R>R iterateBySql(IterationCallback<T, R> callback, String sql) {
+	protected <R>R iterateBySql(IterationCallback<E, R> callback, String sql) {
 		return sqlManager.iterateBySql(entityClass, callback, sql);
 	}
 	
 	@SuppressWarnings("javadoc")
-	protected <R>R iterateBySql(IterationCallback<T, R> callback, String sql, Object... params) {
+	protected <R>R iterateBySql(IterationCallback<E, R> callback, String sql, Object... params) {
 		return sqlManager.iterateBySql(entityClass, callback, sql, params);
 	}
 	
 	@SuppressWarnings("javadoc")
-	protected int updateBatch(List<T> entities) {
+	protected int updateBatch(List<E> entities) {
 		return sqlManager.updateBatch(entities);
 	}
 	
 	@SuppressWarnings("javadoc")
-	protected int updateBatch(T... entities) {
+	protected int updateBatch(E... entities) {
 		return sqlManager.updateBatch(entities);
 	}
 	

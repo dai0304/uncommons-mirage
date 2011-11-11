@@ -19,13 +19,13 @@ package jp.xet.uncommons.mirage.spring.data;
 /**
  * Mirageフレームワークを利用した {@link LogicalDeleteJdbcRepository} の実装クラス。
  * 
- * @param <T> the domain type the repository manages
+ * @param <E> the domain type the repository manages
  * @since 1.0
  * @version $Id$
  * @author daisuke
  */
-public abstract class LogicalDeleteMirageRepository<T> extends SimpleMirageRepository<T, Long> implements
-		LogicalDeleteJdbcRepository<T> {
+public abstract class LogicalDeleteMirageRepository<E extends Identifiable> extends SimpleMirageRepository<E, Long>
+		implements LogicalDeleteJdbcRepository<E> {
 	
 	/**
 	 * インスタンスを生成する。
@@ -33,8 +33,13 @@ public abstract class LogicalDeleteMirageRepository<T> extends SimpleMirageRepos
 	 * @param entityClass エンティティの型
 	 * @throws IllegalArgumentException 引数に{@code null}を与えた場合
 	 */
-	public LogicalDeleteMirageRepository(Class<T> entityClass) {
+	public LogicalDeleteMirageRepository(Class<E> entityClass) {
 		super(entityClass);
+	}
+	
+	@Override
+	public void delete(E entity) {
+		sqlManager.executeUpdate(pathOf("baseLogicalDelete.sql"), createParams(getId(entity)));
 	}
 	
 	@Override
@@ -45,19 +50,19 @@ public abstract class LogicalDeleteMirageRepository<T> extends SimpleMirageRepos
 	}
 	
 	@Override
-	public void delete(T entity) {
-		sqlManager.executeUpdate(pathOf("baseLogicalDelete.sql"), createParams(getId(entity)));
-	}
-	
-	@Override
-	public void deleteInBatch(Iterable<T> entities) {
+	public void deleteInBatch(Iterable<E> entities) {
 		// THINK これでいいのか…？
 		delete(entities);
 	}
 	
 	@Override
+	public void physicalDelete(E entity) {
+		sqlManager.deleteEntity(entity);
+	}
+	
+	@Override
 	@SuppressWarnings("unchecked")
-	public void physicalDelete(Iterable<? extends T> entities) {
+	public void physicalDelete(Iterable<? extends E> entities) {
 		sqlManager.deleteBatch(entities);
 	}
 	
@@ -67,18 +72,13 @@ public abstract class LogicalDeleteMirageRepository<T> extends SimpleMirageRepos
 	}
 	
 	@Override
-	public void physicalDelete(T entity) {
-		sqlManager.deleteEntity(entity);
-	}
-	
-	@Override
 	public void physicalDeleteAll() {
 		sqlManager.deleteBatch(findAll());
 	}
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public void physicalDeleteInBatch(Iterable<T> entities) {
+	public void physicalDeleteInBatch(Iterable<E> entities) {
 		sqlManager.deleteBatch(entities);
 	}
 	
