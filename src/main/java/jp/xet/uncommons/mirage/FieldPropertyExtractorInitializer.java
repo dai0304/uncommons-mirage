@@ -17,6 +17,7 @@
 package jp.xet.uncommons.mirage;
 
 import jp.sf.amateras.mirage.bean.BeanDescFactory;
+import jp.sf.amateras.mirage.bean.FieldPropertyExtractor;
 
 /**
  * {@link BeanDescFactory}に{@link FieldPropertyExtractor}を設定するタイミングが掴めなかったので強引に…orz

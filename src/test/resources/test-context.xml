@@ -43,7 +43,7 @@
 	</bean>
 
 	<!-- <bean id="nameConverter" class="jp.sf.amateras.mirage.naming.DefaultNameConverter"/> -->
-	<bean id="nameConverter" class="jp.xet.uncommons.mirage.RailsLikeNameConverter"/>
+	<bean id="nameConverter" class="jp.sf.amateras.mirage.naming.RailsLikeNameConverter"/>
 	
 	<context:component-scan base-package="jp.xet.uncommons.mirage.spring"/>
 
