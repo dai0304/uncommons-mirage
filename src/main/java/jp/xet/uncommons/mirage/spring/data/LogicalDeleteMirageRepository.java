@@ -27,6 +27,10 @@ package jp.xet.uncommons.mirage.spring.data;
 public abstract class LogicalDeleteMirageRepository<E extends Identifiable> extends IdentifiableMirageRepository<E>
 		implements LogicalDeleteJdbcRepository<E> {
 	
+	static final SqlResource BASE_LOGICAL_DELETE = new SimpleSqlResource(SimpleMirageRepository.class,
+			"baseLogicalDelete.sql");
+	
+	
 	/**
 	 * インスタンスを生成する。
 	 * 
@@ -39,13 +43,13 @@ public abstract class LogicalDeleteMirageRepository<E extends Identifiable> exte
 	
 	@Override
 	public void delete(E entity) {
-		sqlManager.executeUpdate(pathOf("baseLogicalDelete.sql"), createParams(getId(entity)));
+		executeUpdate(BASE_LOGICAL_DELETE, createParams(getId(entity)));
 	}
 	
 	@Override
 	public void delete(Long id) {
 		if (id > 0) {
-			sqlManager.executeUpdate(pathOf("baseLogicalDelete.sql"), createParams(id));
+			executeUpdate(BASE_LOGICAL_DELETE, createParams(id));
 		}
 	}
 	
@@ -85,7 +89,7 @@ public abstract class LogicalDeleteMirageRepository<E extends Identifiable> exte
 	@Override
 	public void revert(Long id) {
 		if (id < 0) {
-			sqlManager.executeUpdate(pathOf("baseLogicalDelete.sql"), createParams(id));
+			executeUpdate(BASE_LOGICAL_DELETE, createParams(id));
 		}
 	}
 }
