@@ -32,7 +32,7 @@ import org.apache.commons.lang.Validate;
  */
 public class SimpleSqlResource implements SqlResource {
 	
-	static String absolutePath(final String packageName, final String relativePath) {
+	static String toAbsolutePath(final String packageName, final String relativePath) {
 		// Is path already absolute?
 		if (relativePath.startsWith("/")) {
 			return relativePath;
@@ -76,8 +76,8 @@ public class SimpleSqlResource implements SqlResource {
 	 */
 	public SimpleSqlResource(Class<?> scope, final String name) {
 		Validate.notEmpty(name);
-		String packName = scope != null ? scope.getPackage().getName() : "";
-		absolutePath = absolutePath(packName, name);
+		String packageName = scope != null ? scope.getPackage().getName() : "";
+		absolutePath = toAbsolutePath(packageName, name);
 	}
 	
 	@Override
