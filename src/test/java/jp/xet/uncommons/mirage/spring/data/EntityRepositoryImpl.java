@@ -18,11 +18,20 @@ package jp.xet.uncommons.mirage.spring.data;
 
 import org.springframework.stereotype.Repository;
 
+/**
+ * {@link EntityRepository}実装クラス。
+ * 
+ * @since 1.0
+ * @version $Id$
+ * @author daisuke
+ */
 @Repository
-@SuppressWarnings("javadoc")
-public class SampleRepos extends LogicalDeleteMirageRepository<Sample> {
+public class EntityRepositoryImpl extends LogicalDeleteMirageRepository<Entity> implements EntityRepository {
 	
-	public SampleRepos() {
-		super(Sample.class);
+	/**
+	 * インスタンスを生成する。
+	 */
+	public EntityRepositoryImpl() {
+		super(Entity.class);
 	}
 }

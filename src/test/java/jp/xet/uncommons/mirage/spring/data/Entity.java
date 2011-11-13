@@ -16,25 +16,46 @@
  */
 package jp.xet.uncommons.mirage.spring.data;
 
+import java.io.Serializable;
 import java.util.TimeZone;
 
+import jp.sf.amateras.mirage.annotation.Column;
 import jp.sf.amateras.mirage.annotation.PrimaryKey;
 import jp.sf.amateras.mirage.annotation.PrimaryKey.GenerationType;
+import jp.sf.amateras.mirage.annotation.Table;
 
-@SuppressWarnings("javadoc")
-public class Sample implements Identifiable {
+import org.springframework.data.annotation.Id;
+
+/**
+ * TODO を表すエンティティクラス。
+ * 
+ * @since 1.0
+ * @version $Id$
+ * @author daisuke
+ */
+@Table(name = "samples")
+@SuppressWarnings("serial")
+public class Entity implements Identifiable, Serializable {
 	
+	@Id
+	@Column(name = "id")
 	@PrimaryKey(generationType = GenerationType.IDENTITY)
 	private long id;
 	
+	@Column(name = "time_zone")
 	private String timeZone;
 	
 	
-	public Sample() {
+	/**
+	 * インスタンスを生成する。
+	 * 
+	 * @param timeZone タイムゾーン
+	 */
+	public Entity(TimeZone timeZone) {
+		this.timeZone = timeZone.getID();
 	}
 	
-	public Sample(TimeZone timeZone) {
-		this.timeZone = timeZone.getID();
+	Entity() {
 	}
 	
 	@Override
@@ -42,10 +63,12 @@ public class Sample implements Identifiable {
 		return id;
 	}
 	
+	@SuppressWarnings("javadoc")
 	public TimeZone getTimeZone() {
 		return TimeZone.getTimeZone(timeZone);
 	}
 	
+	@SuppressWarnings("javadoc")
 	public void setTimeZone(TimeZone timeZone) {
 		this.timeZone = timeZone.getID();
 	}

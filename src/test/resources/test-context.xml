@@ -34,17 +34,16 @@
 		<property name="transactionManager" ref="transactionManager" />
 	</bean>
 
+	<!-- <bean id="nameConverter" class="jp.sf.amateras.mirage.naming.DefaultNameConverter"/> -->
+	<bean id="nameConverter" class="jp.sf.amateras.mirage.naming.RailsLikeNameConverter"/>
 	<bean id="dialect" class="jp.sf.amateras.mirage.dialect.MySQLDialect"/>
-
+	
 	<bean id="sqlManager" class="jp.sf.amateras.mirage.SqlManagerImpl">
 		<property name="connectionProvider" ref="connectionProvider" />
 		<property name="dialect" ref="dialect" />
 		<property name="nameConverter" ref="nameConverter"/>
 	</bean>
 
-	<!-- <bean id="nameConverter" class="jp.sf.amateras.mirage.naming.DefaultNameConverter"/> -->
-	<bean id="nameConverter" class="jp.sf.amateras.mirage.naming.RailsLikeNameConverter"/>
-	
 	<context:component-scan base-package="jp.xet.uncommons.mirage.spring"/>
 
 </beans>

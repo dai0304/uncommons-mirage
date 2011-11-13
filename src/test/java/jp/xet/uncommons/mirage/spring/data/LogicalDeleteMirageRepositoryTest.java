@@ -42,15 +42,15 @@ public class LogicalDeleteMirageRepositoryTest {
 	private static Logger logger = LoggerFactory.getLogger(LogicalDeleteMirageRepositoryTest.class);
 	
 	@Autowired
-	SampleRepos repos;
+	EntityRepositoryImpl repos;
 	
 	
 	@Test
 	public void test_crud() {
-		Sample entity = new Sample(TimeZone.getTimeZone("Asia/Tokyo"));
+		Entity entity = new Entity(TimeZone.getTimeZone("Asia/Tokyo"));
 		assertThat(repos.count(), is(0L));
 		
-		Sample saved = repos.save(entity); // insert
+		Entity saved = repos.save(entity); // insert
 		assertThat(saved.getId(), is(not(0L)));
 		assertThat(repos.count(), is(1L));
 		
@@ -58,7 +58,7 @@ public class LogicalDeleteMirageRepositoryTest {
 		repos.save(saved); // update
 		assertThat(repos.count(), is(1L));
 		
-		Sample found = repos.findOne(saved.getId()); // found
+		Entity found = repos.findOne(saved.getId()); // found
 		assertThat(found, is(notNullValue()));
 		assertThat(found.getTimeZone().getID(), is("Etc/Greenwich"));
 		
