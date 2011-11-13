@@ -54,6 +54,10 @@ public abstract class SimpleMirageRepository<E, ID extends Serializable> impleme
 	static final SqlResource BASE_SELECT = new SimpleSqlResource(SimpleMirageRepository.class, "baseSelect.sql");
 	
 	
+	public static SqlResource pathOf(Class<?> scope, String filename) {
+		return new SimpleSqlResource(scope, filename);
+	}
+	
 	/**
 	 * SQLファイル名をクラスパス上におけるパス名に変換する。
 	 * 
@@ -62,7 +66,7 @@ public abstract class SimpleMirageRepository<E, ID extends Serializable> impleme
 	 * @since 1.0
 	 */
 	@Deprecated
-	protected static SqlResource pathOf(final String filename) {
+	public static SqlResource pathOf(final String filename) {
 		return new SqlResource() {
 			
 			@Override
@@ -394,10 +398,6 @@ public abstract class SimpleMirageRepository<E, ID extends Serializable> impleme
 	@SuppressWarnings("javadoc")
 	protected <R>R iterateBySql(IterationCallback<E, R> callback, String sql, Object... params) {
 		return sqlManager.iterateBySql(entityClass, callback, sql, params);
-	}
-	
-	protected SqlResource pathOf(Class<?> scope, String filename) {
-		return new SimpleSqlResource(scope, filename);
 	}
 	
 	@SuppressWarnings("javadoc")
