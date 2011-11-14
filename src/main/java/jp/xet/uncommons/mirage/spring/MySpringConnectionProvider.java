@@ -19,6 +19,8 @@ package jp.xet.uncommons.mirage.spring;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import javax.sql.DataSource;
+
 import jp.sf.amateras.mirage.integration.spring.SpringConnectionProvider;
 import jp.sf.amateras.mirage.provider.ConnectionProvider;
 
@@ -61,7 +63,8 @@ public class MySpringConnectionProvider implements ConnectionProvider, Initializ
 		} else {
 			logger.warn("connection holder is null...");
 			try {
-				return transactionManager.getDataSource().getConnection();
+				DataSource ds = transactionManager.getDataSource();
+				return ds.getConnection();
 			} catch (SQLException e) {
 				logger.error("fail to connect", e);
 			}

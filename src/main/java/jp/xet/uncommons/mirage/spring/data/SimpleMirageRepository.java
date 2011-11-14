@@ -420,12 +420,15 @@ public abstract class SimpleMirageRepository<E, ID extends Serializable> impleme
 	}
 	
 	private void addPageParam(Map<String, Object> params, Pageable pageable) {
-		params.put("offset", pageable.getOffset());
-		params.put("size", pageable.getPageSize());
+		params.put("offset", pageable == null ? null : pageable.getOffset());
+		params.put("size", pageable == null ? null : pageable.getPageSize());
 	}
 	
 	private void addSortParam(Map<String, Object> params, Sort sort) {
-		ArrayList<String> list = new ArrayList<String>();
+		if (sort == null) {
+			return;
+		}
+		List<String> list = new ArrayList<String>();
 		for (Order order : sort) {
 			String orderDefinition = String.format("%s %s", order.getProperty(), order.getDirection()).trim();
 			if (orderDefinition.isEmpty() == false) {
