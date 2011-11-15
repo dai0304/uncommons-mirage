@@ -52,7 +52,7 @@ import org.springframework.util.Assert;
  */
 public abstract class SimpleMirageRepository<E, ID extends Serializable> implements JdbcRepository<E, ID> {
 	
-	static final SqlResource BASE_SELECT = new SimpleSqlResource(SimpleMirageRepository.class, "baseSelect.sql");
+	static final SqlResource BASE_SELECT_SQL = new SimpleSqlResource(SimpleMirageRepository.class, "baseSelect.sql");
 	
 	
 	/**
@@ -357,7 +357,7 @@ public abstract class SimpleMirageRepository<E, ID extends Serializable> impleme
 	}
 	
 	protected SqlResource getBaseSelectSqlResource() {
-		return BASE_SELECT;
+		return BASE_SELECT_SQL;
 	}
 	
 	/**
