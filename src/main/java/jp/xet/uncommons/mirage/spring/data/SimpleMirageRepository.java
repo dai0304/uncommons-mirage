@@ -31,6 +31,7 @@ import jp.sf.amateras.mirage.naming.NameConverter;
 import jp.sf.amateras.mirage.util.MirageUtil;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -54,7 +55,17 @@ public abstract class SimpleMirageRepository<E, ID extends Serializable> impleme
 	static final SqlResource BASE_SELECT = new SimpleSqlResource(SimpleMirageRepository.class, "baseSelect.sql");
 	
 	
-	public static SqlResource pathOf(Class<?> scope, String filename) {
+	/**
+	 * 新しい {@link SqlResource} を生成する。
+	 * 
+	 * @param scope クラスパス上のSQLの位置を表すクラス。無名パッケージの場合は{@code null}
+	 * @param filename クラスパス上のSQLファイル名
+	 * @return {@link SqlResource}
+	 * @throws IllegalArgumentException 引数{@code filename}に{@code null}を与えた場合
+	 * @since 1.0
+	 */
+	public static SqlResource newSqlResource(Class<?> scope, String filename) {
+		Validate.notNull(filename);
 		return new SimpleSqlResource(scope, filename);
 	}
 	
@@ -199,37 +210,54 @@ public abstract class SimpleMirageRepository<E, ID extends Serializable> impleme
 		return list;
 	}
 	
+	/**
+	 * @see SqlManager#call(Class, String)
+	 */
 	@SuppressWarnings("javadoc")
 	protected E call(Class<E> resultClass, String functionName) {
 		return sqlManager.call(resultClass, functionName);
 	}
 	
+	/**
+	 * @see SqlManager#call(Class, String, Object)
+	 */
 	@SuppressWarnings("javadoc")
 	protected E call(Class<E> resultClass, String functionName, Object param) {
 		return sqlManager.call(resultClass, functionName, param);
 	}
 	
+	/**
+	 * @see SqlManager#call(String)
+	 */
 	@SuppressWarnings("javadoc")
 	protected void call(String procedureName) {
 		sqlManager.call(procedureName);
 	}
 	
+	/**
+	 * @see SqlManager#call(String, Object)
+	 */
 	@SuppressWarnings("javadoc")
 	protected void call(String procedureName, Object parameter) {
 		sqlManager.call(procedureName, parameter);
 	}
 	
+	/**
+	 * @see SqlManager#callForList(Class, String)
+	 */
 	@SuppressWarnings("javadoc")
 	protected List<E> callForList(Class<E> resultClass, String functionName) {
 		return sqlManager.callForList(resultClass, functionName);
 	}
 	
+	/**
+	 * @see SqlManager#callForList(Class, String, Object)
+	 */
 	@SuppressWarnings("javadoc")
 	protected List<E> callForList(Class<E> resultClass, String functionName, Object param) {
 		return sqlManager.callForList(resultClass, functionName, param);
 	}
 	
-	@SuppressWarnings("javadoc")
 	protected Map<String, Object> createParams() {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("table", MirageUtil.getTableName(entityClass, nameConverter));
@@ -237,28 +265,24 @@ public abstract class SimpleMirageRepository<E, ID extends Serializable> impleme
 		return params;
 	}
 	
-	@SuppressWarnings("javadoc")
 	protected Map<String, Object> createParams(ID id) {
 		Map<String, Object> params = createParams();
 		addIdParam(params, id);
 		return params;
 	}
 	
-	@SuppressWarnings("javadoc")
 	protected Map<String, Object> createParams(Pageable pageable) {
 		Map<String, Object> params = createParams();
 		addPageParam(params, pageable);
 		return params;
 	}
 	
-	@SuppressWarnings("javadoc")
 	protected Map<String, Object> createParams(Sort sort) {
 		Map<String, Object> params = createParams();
 		addSortParam(params, sort);
 		return params;
 	}
 	
-	@SuppressWarnings("javadoc")
 	protected Map<String, Object> createParams(Sort sort, Pageable pageable) {
 		Map<String, Object> params = createParams();
 		addSortParam(params, sort);
@@ -266,41 +290,67 @@ public abstract class SimpleMirageRepository<E, ID extends Serializable> impleme
 		return params;
 	}
 	
+	/**
+	 * @see SqlManager#deleteBatch(Object...)
+	 */
 	@SuppressWarnings("javadoc")
 	protected int deleteBatch(E... entities) {
 		return sqlManager.deleteBatch(entities);
 	}
 	
+	/**
+	 * @see SqlManager#deleteBatch(List)
+	 */
 	@SuppressWarnings("javadoc")
 	protected int deleteBatch(List<E> entities) {
 		return sqlManager.deleteBatch(entities);
 	}
 	
+	/**
+	 * @see SqlManager#deleteEntity(Object)
+	 */
 	@SuppressWarnings("javadoc")
 	protected int deleteEntity(Object entity) {
 		return sqlManager.deleteEntity(entity);
 	}
 	
+	/**
+	 * @see SqlManager#executeUpdate(String)
+	 */
 	@SuppressWarnings("javadoc")
 	protected int executeUpdate(SqlResource resource) {
+		Assert.notNull(resource);
 		return sqlManager.executeUpdate(resource.getAbsolutePath());
 	}
 	
+	/**
+	 * @see SqlManager#executeUpdate(String, Object)
+	 */
 	@SuppressWarnings("javadoc")
 	protected int executeUpdate(SqlResource resource, Object param) {
+		Assert.notNull(resource);
 		return sqlManager.executeUpdate(resource.getAbsolutePath(), param);
 	}
 	
+	/**
+	 * @see SqlManager#executeUpdateBySql(String)
+	 */
 	@SuppressWarnings("javadoc")
 	protected int executeUpdateBySql(String sql) {
 		return sqlManager.executeUpdateBySql(sql);
 	}
 	
+	/**
+	 * @see SqlManager#executeUpdateBySql(String, Object...)
+	 */
 	@SuppressWarnings("javadoc")
 	protected int executeUpdateBySql(String sql, Object... params) {
 		return sqlManager.executeUpdateBySql(sql, params);
 	}
 	
+	/**
+	 * @see SqlManager#findEntity(Class, Object...)
+	 */
 	@SuppressWarnings("javadoc")
 	protected E findEntity(Object... id) {
 		return sqlManager.findEntity(entityClass, id);
@@ -310,106 +360,172 @@ public abstract class SimpleMirageRepository<E, ID extends Serializable> impleme
 		return BASE_SELECT;
 	}
 	
+	/**
+	 * @see SqlManager#getCount(String, Object)
+	 */
 	@SuppressWarnings("javadoc")
 	protected int getCount(SqlResource resource, Object param) {
+		Assert.notNull(resource);
 		return sqlManager.getCount(resource.getAbsolutePath(), param);
 	}
 	
+	/**
+	 * @see SqlManager#getCount(String)
+	 */
 	@SuppressWarnings("javadoc")
 	protected int getCount(String sqlPath) {
 		return sqlManager.getCount(sqlPath);
 	}
 	
+	/**
+	 * @see SqlManager#getResultList(Class, String)
+	 */
 	@SuppressWarnings("javadoc")
 	protected List<E> getResultList(SqlResource resource) {
+		Assert.notNull(resource);
 		return sqlManager.getResultList(entityClass, resource.getAbsolutePath());
 	}
 	
+	/**
+	 * @see SqlManager#getResultList(Class, String, Object)
+	 */
 	@SuppressWarnings("javadoc")
 	protected List<E> getResultList(SqlResource resource, Object param) {
+		Assert.notNull(resource);
 		return sqlManager.getResultList(entityClass, resource.getAbsolutePath(), param);
 	}
 	
+	/**
+	 * @see SqlManager#getResultListBySql(Class, String)
+	 */
 	@SuppressWarnings("javadoc")
 	protected List<E> getResultListBySql(String sql) {
 		return sqlManager.getResultListBySql(entityClass, sql);
 	}
 	
+	/**
+	 * @see SqlManager#getResultListBySql(Class, String, Object...)
+	 */
 	@SuppressWarnings("javadoc")
 	protected List<E> getResultListBySql(String sql, Object... params) {
 		return sqlManager.getResultListBySql(entityClass, sql, params);
 	}
 	
+	/**
+	 * @see SqlManager#getSingleResult(Class, String)
+	 */
 	@SuppressWarnings("javadoc")
 	protected E getSingleResult(SqlResource resource) {
+		Assert.notNull(resource);
 		return sqlManager.getSingleResult(entityClass, resource.getAbsolutePath());
 	}
 	
+	/**
+	 * @see SqlManager#getSingleResult(Class, String, Object)
+	 */
 	@SuppressWarnings("javadoc")
 	protected E getSingleResult(SqlResource resource, Object param) {
+		Assert.notNull(resource);
 		return sqlManager.getSingleResult(entityClass, resource.getAbsolutePath(), param);
 	}
 	
+	/**
+	 * @see SqlManager#getSingleResultBySql(Class, String)
+	 */
 	@SuppressWarnings("javadoc")
 	protected E getSingleResultBySql(String sql) {
 		return sqlManager.getSingleResultBySql(entityClass, sql);
 	}
 	
+	/**
+	 * @see SqlManager#getSingleResultBySql(Class, String, Object...)
+	 */
 	@SuppressWarnings("javadoc")
 	protected E getSingleResultBySql(String sql, Object... params) {
 		return sqlManager.getSingleResultBySql(entityClass, sql, params);
 	}
 	
-	@SuppressWarnings("javadoc")
 	protected SqlManager getSqlManager() {
 		return sqlManager;
 	}
 	
+	/**
+	 * @see SqlManager#insertBatch(Object...)
+	 */
 	@SuppressWarnings("javadoc")
 	protected int insertBatch(E... entities) {
 		return sqlManager.insertBatch(entities);
 	}
 	
+	/**
+	 * @see SqlManager#insertBatch(List)
+	 */
 	@SuppressWarnings("javadoc")
 	protected int insertBatch(List<E> entities) {
 		return sqlManager.insertBatch(entities);
 	}
 	
+	/**
+	 * @see SqlManager#insertEntity(Object)
+	 */
 	@SuppressWarnings("javadoc")
 	protected int insertEntity(Object entity) {
 		return sqlManager.insertEntity(entity);
 	}
 	
+	/**
+	 * @see SqlManager#iterate(Class, IterationCallback, String)
+	 */
 	@SuppressWarnings("javadoc")
 	protected <R>R iterate(IterationCallback<E, R> callback, SqlResource resource) {
+		Assert.notNull(resource);
 		return sqlManager.iterate(entityClass, callback, resource.getAbsolutePath());
 	}
 	
+	/**
+	 * @see SqlManager#iterate(Class, IterationCallback, String, Object)
+	 */
 	@SuppressWarnings("javadoc")
 	protected <R>R iterate(IterationCallback<E, R> callback, SqlResource resource, Object param) {
+		Assert.notNull(resource);
 		return sqlManager.iterate(entityClass, callback, resource.getAbsolutePath(), param);
 	}
 	
+	/**
+	 * @see SqlManager#iterateBySql(Class, IterationCallback, String)
+	 */
 	@SuppressWarnings("javadoc")
 	protected <R>R iterateBySql(IterationCallback<E, R> callback, String sql) {
 		return sqlManager.iterateBySql(entityClass, callback, sql);
 	}
 	
+	/**
+	 * @see SqlManager#iterateBySql(Class, IterationCallback, String, Object...)
+	 */
 	@SuppressWarnings("javadoc")
 	protected <R>R iterateBySql(IterationCallback<E, R> callback, String sql, Object... params) {
 		return sqlManager.iterateBySql(entityClass, callback, sql, params);
 	}
 	
+	/**
+	 * @see SqlManager#updateBatch(Object...)
+	 */
 	@SuppressWarnings("javadoc")
 	protected int updateBatch(E... entities) {
 		return sqlManager.updateBatch(entities);
 	}
 	
+	/**
+	 * @see SqlManager#updateBatch(List)
+	 */
 	@SuppressWarnings("javadoc")
 	protected int updateBatch(List<E> entities) {
 		return sqlManager.updateBatch(entities);
 	}
 	
+	/**
+	 * @see SqlManager#updateEntity(Object)
+	 */
 	@SuppressWarnings("javadoc")
 	protected int updateEntity(Object entity) {
 		return sqlManager.updateEntity(entity);
@@ -425,6 +541,7 @@ public abstract class SimpleMirageRepository<E, ID extends Serializable> impleme
 	}
 	
 	private void addSortParam(Map<String, Object> params, Sort sort) {
+		params.put("order", null);
 		if (sort == null) {
 			return;
 		}
