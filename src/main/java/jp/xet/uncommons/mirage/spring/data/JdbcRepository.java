@@ -40,6 +40,7 @@ public interface JdbcRepository<E, ID extends Serializable> extends PagingAndSor
 	 * {@inheritDoc}
 	 * 
 	 * @throws DataIntegrityViolationException 整合性違反が発生した場合
+	 * @throws IllegalArgumentException 引数に{@code null}を与えた場合
 	 * @since 1.0
 	 */
 	@Override
@@ -58,6 +59,7 @@ public interface JdbcRepository<E, ID extends Serializable> extends PagingAndSor
 	 * {@inheritDoc}
 	 * 
 	 * @throws DataIntegrityViolationException 整合性違反が発生した場合
+	 * @throws IllegalArgumentException 引数に{@code null}を与えた場合
 	 * @since 1.0
 	 */
 	@Override
@@ -99,6 +101,8 @@ public interface JdbcRepository<E, ID extends Serializable> extends PagingAndSor
 	
 	/**
 	 * {@inheritDoc}
+	 * 
+	 * <p>{@code entity}として{@code null}を渡した場合、何もせずに{@code null}を返す。</p>
 	 * 
 	 * @throws DataIntegrityViolationException 整合性違反が発生した場合
 	 * @since 1.0

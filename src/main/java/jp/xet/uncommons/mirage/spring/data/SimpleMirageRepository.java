@@ -115,16 +115,21 @@ public abstract class SimpleMirageRepository<E, ID extends Serializable> impleme
 	
 	@Override
 	public void delete(E entity) {
+		Validate.notNull(entity);
 		sqlManager.deleteEntity(entity);
 	}
 	
 	@Override
 	public void delete(ID id) {
-		sqlManager.deleteEntity(findOne(id));
+		E found = findOne(id);
+		if (found != null) {
+			sqlManager.deleteEntity(found);
+		}
 	}
 	
 	@Override
 	public void delete(Iterable<? extends E> entities) {
+		Validate.notNull(entities);
 		for (E entity : entities) {
 			delete(entity);
 		}
@@ -166,7 +171,7 @@ public abstract class SimpleMirageRepository<E, ID extends Serializable> impleme
 	
 	@Override
 	public List<E> findAll(Sort sort) {
-		return getResultList(getBaseSelectSqlResource(), createParams());
+		return getResultList(getBaseSelectSqlResource(), createParams(sort));
 	}
 	
 	@Override
