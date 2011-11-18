@@ -32,7 +32,7 @@ import jp.xet.uncommons.mirage.valuetype.enumerated.Enumerated.EnumType;
  * @version $Id$
  * @author daisuke
  */
-public class EnumOrdinalValueType implements ValueType {
+public class EnumOrdinalValueType implements ValueType<Object> {
 	
 	@SuppressWarnings("unchecked")
 	private static <T extends Enum<T>>T toEnum(Class<?> type, int ordinal) {
@@ -40,25 +40,25 @@ public class EnumOrdinalValueType implements ValueType {
 	}
 	
 	@Override
-	public Object get(Class<?> type, CallableStatement cs, int index) throws SQLException {
+	public Integer get(Class<?> type, CallableStatement cs, int index) throws SQLException {
 		int value = cs.getInt(index);
 		return value;
 	}
 	
 	@Override
-	public Object get(Class<?> type, CallableStatement cs, String parameterName) throws SQLException {
+	public Integer get(Class<?> type, CallableStatement cs, String parameterName) throws SQLException {
 		int value = cs.getInt(parameterName);
 		return value;
 	}
 	
 	@Override
-	public Object get(Class<?> type, ResultSet rs, int columnIndex) throws SQLException {
+	public Enum<?> get(Class<?> type, ResultSet rs, int columnIndex) throws SQLException {
 		int ordinal = rs.getInt(columnIndex);
 		return toEnum(type, ordinal);
 	}
 	
 	@Override
-	public Object get(Class<?> type, ResultSet rs, String columnName) throws SQLException {
+	public Enum<?> get(Class<?> type, ResultSet rs, String columnName) throws SQLException {
 		int ordinal = rs.getInt(columnName);
 		return toEnum(type, ordinal);
 	}
