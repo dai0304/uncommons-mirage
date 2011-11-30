@@ -25,6 +25,8 @@ import java.sql.Types;
 import jp.sf.amateras.mirage.type.ValueType;
 import jp.xet.uncommons.mirage.valuetype.enumerated.Enumerated.EnumType;
 
+import org.springframework.core.annotation.AnnotationUtils;
+
 /**
  * {@link Enum}型をordinalの {@code int}型としてDBに保存するための {@link ValueType}実装クラス。
  * 
@@ -73,7 +75,7 @@ public class EnumOrdinalValueType implements ValueType<Object> {
 		if (Enum.class.isAssignableFrom(type) == false) {
 			return false;
 		}
-		Enumerated enumerated = type.getAnnotation(Enumerated.class);
+		Enumerated enumerated = AnnotationUtils.findAnnotation(type, Enumerated.class);
 		if (enumerated == null) {
 			return false;
 		}
