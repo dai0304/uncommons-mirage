@@ -366,20 +366,21 @@ public abstract class SimpleMirageRepository<E, ID extends Serializable> impleme
 	}
 	
 	/**
+	 * @see SqlManager#getCount(String)
+	 */
+	@SuppressWarnings("javadoc")
+	protected int getCount(SqlResource resource) {
+		Assert.notNull(resource);
+		return sqlManager.getCount(resource.getAbsolutePath());
+	}
+	
+	/**
 	 * @see SqlManager#getCount(String, Object)
 	 */
 	@SuppressWarnings("javadoc")
 	protected int getCount(SqlResource resource, Object param) {
 		Assert.notNull(resource);
 		return sqlManager.getCount(resource.getAbsolutePath(), param);
-	}
-	
-	/**
-	 * @see SqlManager#getCount(String)
-	 */
-	@SuppressWarnings("javadoc")
-	protected int getCount(String sqlPath) {
-		return sqlManager.getCount(sqlPath);
 	}
 	
 	/**
