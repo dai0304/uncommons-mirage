@@ -203,16 +203,22 @@ public abstract class SimpleMirageRepository<E, ID extends Serializable> impleme
 		if (entities == null) {
 			return Collections.emptyList();
 		}
-		List<E> list = new ArrayList<E>();
+		List<E> toUpdate = new ArrayList<E>();
+		List<E> toInsert = new ArrayList<E>();
 		Iterator<? extends E> iterator = entities.iterator();
 		while (iterator.hasNext()) {
 			E entity = iterator.next();
 			if (entity != null) {
-				list.add(entity);
+				if (exists(getId(entity))) {
+					toUpdate.add(entity);
+				} else {
+					toInsert.add(entity);
+				}
 			}
 		}
-		sqlManager.insertBatch(list);
-		return list;
+		sqlManager.updateBatch(toUpdate);
+		sqlManager.insertBatch(toInsert);
+		return toInsert;
 	}
 	
 	/**
