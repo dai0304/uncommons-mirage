@@ -30,6 +30,9 @@ import jp.sf.amateras.mirage.exception.SQLRuntimeException;
 import jp.sf.amateras.mirage.naming.NameConverter;
 import jp.sf.amateras.mirage.util.MirageUtil;
 
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -550,6 +553,16 @@ public abstract class SimpleMirageRepository<E, ID extends Serializable> impleme
 	private void addPageParam(Map<String, Object> params, Pageable pageable) {
 		params.put("offset", pageable == null ? null : pageable.getOffset());
 		params.put("size", pageable == null ? null : pageable.getPageSize());
+		if (pageable != null && pageable.getSort() != null) {
+			List<String> orders = Lists.newArrayList();
+			Sort sort = pageable.getSort();
+			for (Order order : sort) {
+				orders.add(String.format("%s %s", order.getProperty(), order.getDirection().name()));
+			}
+			if (orders.size() != 0) {
+				params.put("orders", Joiner.on(", ").join(orders));
+			}
+		}
 	}
 	
 	private void addSortParam(Map<String, Object> params, Sort sort) {
