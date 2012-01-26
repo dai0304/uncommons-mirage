@@ -38,7 +38,11 @@ public class EnumOrdinalValueType implements ValueType<Object> {
 	
 	@SuppressWarnings("unchecked")
 	private static <T extends Enum<T>>T toEnum(Class<?> type, int ordinal) {
-		return (T) type.getEnumConstants()[ordinal];
+		Object[] values = type.getEnumConstants();
+		if (values.length >= ordinal) {
+			return null;
+		}
+		return (T) values[ordinal];
 	}
 	
 	@Override
