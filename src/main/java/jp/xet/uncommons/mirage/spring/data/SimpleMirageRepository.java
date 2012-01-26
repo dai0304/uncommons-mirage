@@ -221,7 +221,7 @@ public abstract class SimpleMirageRepository<E, ID extends Serializable> impleme
 		}
 		sqlManager.updateBatch(toUpdate);
 		sqlManager.insertBatch(toInsert);
-		return toInsert;
+		return Lists.newArrayList(entities);
 	}
 	
 	/**

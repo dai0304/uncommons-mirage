@@ -74,7 +74,7 @@
     <dependency>
       <groupId>org.lazyluke</groupId>
       <artifactId>log4jdbc-remix</artifactId>
-      <version>0.2.4</version>
+      <version>0.2.6</version>
       <exclusions>
         <exclusion>
           <groupId>org.slf4j</groupId>
