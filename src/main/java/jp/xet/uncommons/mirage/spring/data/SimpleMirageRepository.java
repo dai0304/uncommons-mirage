@@ -33,7 +33,6 @@ import jp.sf.amateras.mirage.util.MirageUtil;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -578,7 +577,7 @@ public abstract class SimpleMirageRepository<E, ID extends Serializable> impleme
 			}
 		}
 		if (list.isEmpty() == false) {
-			params.put("order", StringUtils.join(list.toArray(new String[list.size()]), ", "));
+			params.put("order", Joiner.on(", ").join(list));
 		}
 	}
 }
