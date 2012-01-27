@@ -66,6 +66,11 @@ public class TimeZoneValueType extends AbstractValueType<TimeZone> {
 	}
 	
 	@Override
+	public boolean isSupport(Class<?> type) {
+		return TimeZone.class.isAssignableFrom(type);
+	}
+	
+	@Override
 	public void set(Class<? extends TimeZone> type, PreparedStatement stmt, TimeZone value, int index)
 			throws SQLException {
 		if (value == null) {
