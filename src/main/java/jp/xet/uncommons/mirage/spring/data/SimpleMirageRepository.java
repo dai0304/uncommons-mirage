@@ -392,6 +392,24 @@ public abstract class SimpleMirageRepository<E, ID extends Serializable> impleme
 	}
 	
 	/**
+	 * @see SqlManager#getCountBySql(String, Object...)
+	 */
+	@SuppressWarnings("javadoc")
+	protected int getCountBySql(String sql) {
+		Assert.notNull(sql);
+		return sqlManager.getCountBySql(sql);
+	}
+	
+	/**
+	 * @see SqlManager#getCountBySql(String, Object...)
+	 */
+	@SuppressWarnings("javadoc")
+	protected int getCountBySql(String sql, Object... params) {
+		Assert.notNull(sql);
+		return sqlManager.getCountBySql(sql, params);
+	}
+	
+	/**
 	 * @see SqlManager#getResultList(Class, String)
 	 */
 	@SuppressWarnings("javadoc")
