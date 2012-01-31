@@ -223,13 +223,13 @@
   </distributionManagement>
   <properties>
     <slf4j-version>[1.6.2,1.7.0)</slf4j-version>
-    <logback-version>[0.9.0,0.10.0)</logback-version>
-    <log4jdbc-version>0.2.7</log4jdbc-version>
-    <mirage-version>1.1.4-SNAPSHOT</mirage-version>
+    <logback-version>[1.0.0,1.1.0)</logback-version>
+    <log4jdbc-version>[0.2.7,0.3.0)</log4jdbc-version>
+    <mirage-version>[1.1.4,1.2.0)</mirage-version>
     <spring-version>3.1.0.RELEASE</spring-version>
     <spring-data-core-version>1.1.0.RELEASE</spring-data-core-version>
-    <h2database-version>1.3.160</h2database-version>
-    <guava-version>10.0.1</guava-version>
-    <commons-lang-version>2.6</commons-lang-version>
+    <h2database-version>[1.3.160,1.4.0)</h2database-version>
+    <guava-version>[10.0.1,10.1)</guava-version>
+    <commons-lang-version>[2.6,3.0)</commons-lang-version>
   </properties>
 </project>
