@@ -54,6 +54,9 @@ public @interface Enumerated {
 		/** Persist enumerated type property or field as an integer */
 		ORDINAL,
 		
+		/** Persist enumerated type property or field as an integer */
+		ONE_BASED_ORDINAL,
+		
 		/** Persist enumerated type property or field as a string */
 		STRING,
 	}
