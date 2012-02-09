@@ -48,24 +48,36 @@ public class EnumOrdinalValueType implements ValueType<Object> {
 	@Override
 	public Integer get(Class<?> type, CallableStatement cs, int index) throws SQLException {
 		int value = cs.getInt(index);
+		if (cs.wasNull()) {
+			return null;
+		}
 		return value;
 	}
 	
 	@Override
 	public Integer get(Class<?> type, CallableStatement cs, String parameterName) throws SQLException {
 		int value = cs.getInt(parameterName);
+		if (cs.wasNull()) {
+			return null;
+		}
 		return value;
 	}
 	
 	@Override
 	public Enum<?> get(Class<?> type, ResultSet rs, int columnIndex) throws SQLException {
 		int ordinal = rs.getInt(columnIndex);
+		if (rs.wasNull()) {
+			return null;
+		}
 		return toEnum(type, ordinal);
 	}
 	
 	@Override
 	public Enum<?> get(Class<?> type, ResultSet rs, String columnName) throws SQLException {
 		int ordinal = rs.getInt(columnName);
+		if (rs.wasNull()) {
+			return null;
+		}
 		return toEnum(type, ordinal);
 	}
 	

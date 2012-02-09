@@ -47,27 +47,27 @@ public class EnumStringValueType implements ValueType<Object> {
 	}
 	
 	@Override
-	public String get(Class<?> type, CallableStatement cs, int index) throws SQLException {
-		String value = cs.getString(index);
-		return value;
+	public Enum<?> get(Class<?> type, CallableStatement cs, int index) throws SQLException {
+		String name = cs.getString(index);
+		return name == null ? null : toEnum(type, name);
 	}
 	
 	@Override
-	public String get(Class<?> type, CallableStatement cs, String parameterName) throws SQLException {
-		String value = cs.getString(parameterName);
-		return value;
+	public Enum<?> get(Class<?> type, CallableStatement cs, String parameterName) throws SQLException {
+		String name = cs.getString(parameterName);
+		return name == null ? null : toEnum(type, name);
 	}
 	
 	@Override
 	public Enum<?> get(Class<?> type, ResultSet rs, int columnIndex) throws SQLException {
 		String name = rs.getString(columnIndex);
-		return toEnum(type, name);
+		return name == null ? null : toEnum(type, name);
 	}
 	
 	@Override
 	public Enum<?> get(Class<?> type, ResultSet rs, String columnName) throws SQLException {
 		String name = rs.getString(columnName);
-		return toEnum(type, name);
+		return name == null ? null : toEnum(type, name);
 	}
 	
 	@Override
