@@ -36,13 +36,16 @@ import org.springframework.core.annotation.AnnotationUtils;
  */
 public class EnumStringValueType implements ValueType<Object> {
 	
-	@SuppressWarnings("unchecked")
-	private static <T extends Enum<T>>T toEnum(Class<?> type, String name) {
+	@SuppressWarnings({
+		"rawtypes",
+		"unchecked"
+	})
+	private static Enum<?> toEnum(Class type, String name) {
 		try {
-			return Enum.valueOf((Class<T>) type, name);
+			return Enum.valueOf(type, name);
 		} catch (IllegalArgumentException e) {
 			// TODO 仕様をきちんと考える
-			return (T) type.getEnumConstants()[0];
+			return null;
 		}
 	}
 	

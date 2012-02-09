@@ -36,13 +36,12 @@ import org.springframework.core.annotation.AnnotationUtils;
  */
 public class EnumOrdinalValueType implements ValueType<Object> {
 	
-	@SuppressWarnings("unchecked")
-	private static <T extends Enum<T>>T toEnum(Class<?> type, int ordinal) {
+	private static Enum<?> toEnum(Class<?> type, int ordinal) {
 		Object[] values = type.getEnumConstants();
 		if (values.length <= ordinal || ordinal < 0) {
 			return null;
 		}
-		return (T) values[ordinal];
+		return (Enum<?>) values[ordinal];
 	}
 	
 	@Override
