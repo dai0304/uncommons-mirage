@@ -21,8 +21,8 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
-
-import java.util.TimeZone;
+import jp.xet.uncommons.mirage.spring.data.example.Entity;
+import jp.xet.uncommons.mirage.spring.data.example.EntityRepositoryImpl;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,20 +47,20 @@ public class LogicalDeleteMirageRepositoryTest {
 	
 	@Test
 	public void test_crud() {
-		Entity entity = new Entity(TimeZone.getTimeZone("Asia/Tokyo"));
+		Entity entity = new Entity("foo");
 		assertThat(repos.count(), is(0L));
 		
 		Entity saved = repos.save(entity); // insert
 		assertThat(saved.getId(), is(not(0L)));
 		assertThat(repos.count(), is(1L));
 		
-		saved.setTimeZone(TimeZone.getTimeZone("Etc/Greenwich"));
+		saved.setStr("bar");
 		repos.save(saved); // update
 		assertThat(repos.count(), is(1L));
 		
 		Entity found = repos.findOne(saved.getId()); // found
 		assertThat(found, is(notNullValue()));
-		assertThat(found.getTimeZone().getID(), is("Etc/Greenwich"));
+		assertThat(found.getStr(), is("bar"));
 		
 		repos.delete(found);
 		assertThat(repos.count(), is(0L));

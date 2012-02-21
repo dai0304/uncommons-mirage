@@ -14,15 +14,15 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package jp.xet.uncommons.mirage.spring.data;
+package jp.xet.uncommons.mirage.spring.data.example;
 
 import java.io.Serializable;
-import java.util.TimeZone;
 
 import jp.sf.amateras.mirage.annotation.Column;
 import jp.sf.amateras.mirage.annotation.PrimaryKey;
 import jp.sf.amateras.mirage.annotation.PrimaryKey.GenerationType;
 import jp.sf.amateras.mirage.annotation.Table;
+import jp.xet.uncommons.mirage.spring.data.Identifiable;
 
 import org.springframework.data.annotation.Id;
 
@@ -42,20 +42,38 @@ public class Entity implements Identifiable, Serializable {
 	@PrimaryKey(generationType = GenerationType.IDENTITY)
 	private long id;
 	
-	@Column(name = "time_zone")
-	private String timeZone;
+	@Column(name = "str")
+	private String str;
 	
 	
 	/**
 	 * インスタンスを生成する。
 	 * 
-	 * @param timeZone タイムゾーン
+	 * @param str string
 	 */
-	public Entity(TimeZone timeZone) {
-		this.timeZone = timeZone.getID();
+	public Entity(String str) {
+		this.str = str;
 	}
 	
 	Entity() {
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		Entity other = (Entity) obj;
+		if (id != other.id) {
+			return false;
+		}
+		return true;
 	}
 	
 	@Override
@@ -64,13 +82,18 @@ public class Entity implements Identifiable, Serializable {
 	}
 	
 	@SuppressWarnings("javadoc")
-	public TimeZone getTimeZone() {
-		return TimeZone.getTimeZone(timeZone);
+	public String getStr() {
+		return str;
+	}
+	
+	@Override
+	public int hashCode() {
+		return (int) (id ^ (id >>> 32)); // CHECKSTYLE IGNORE THIS LINE
 	}
 	
 	@SuppressWarnings("javadoc")
-	public void setTimeZone(TimeZone timeZone) {
-		this.timeZone = timeZone.getID();
+	public void setStr(String str) {
+		this.str = str;
 	}
 	
 	void setId(long id) {

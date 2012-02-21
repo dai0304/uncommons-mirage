@@ -14,7 +14,9 @@
  * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-package jp.xet.uncommons.mirage.spring.data;
+package jp.xet.uncommons.mirage.spring.data.example;
+
+import jp.xet.uncommons.mirage.spring.data.LogicalDeleteJdbcRepository;
 
 /**
  * {@link Entity}用リポジトリインターフェイス。
