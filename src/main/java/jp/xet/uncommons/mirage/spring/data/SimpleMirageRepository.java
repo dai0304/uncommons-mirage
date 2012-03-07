@@ -583,7 +583,7 @@ public abstract class SimpleMirageRepository<E, ID extends Serializable> impleme
 	}
 	
 	private void addSortParam(Map<String, Object> params, Sort sort) {
-		params.put("order", null);
+		params.put("orders", null);
 		if (sort == null) {
 			return;
 		}
@@ -595,7 +595,7 @@ public abstract class SimpleMirageRepository<E, ID extends Serializable> impleme
 			}
 		}
 		if (list.isEmpty() == false) {
-			params.put("order", Joiner.on(", ").join(list));
+			params.put("orders", Joiner.on(", ").join(list));
 		}
 	}
 }
