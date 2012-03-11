@@ -51,6 +51,8 @@ public interface LogicalDeleteJdbcRepository<E extends Identifiable> extends Jdb
 	@Override
 	void delete(Long id);
 	
+	E findOneIncludeLogicalDeleted(Long id);
+	
 	/**
 	 * Deletes a given entity.
 	 *

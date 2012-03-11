@@ -86,6 +86,19 @@ public abstract class LogicalDeleteMirageRepository<E extends Identifiable> exte
 	}
 	
 	@Override
+	public E findOneIncludeLogicalDeleted(Long id) {
+		Map<String, Object> params = createParams(id);
+		params.remove("id");
+		params.put("absid", id);
+		params.put("include_logical_deleted", true);
+		try {
+			return getSingleResult(getBaseSelectSqlResource(), params);
+		} catch (SQLRuntimeException e) {
+			throw getExceptionTranslator().translate("findOne", null, e.getCause());
+		}
+	}
+	
+	@Override
 	public void physicalDelete(E entity) {
 		try {
 			sqlManager.deleteEntity(entity);
@@ -150,14 +163,21 @@ public abstract class LogicalDeleteMirageRepository<E extends Identifiable> exte
 		}
 		try {
 			long id = entity.getId();
-			
-			if (exists(id)) {
-				sqlManager.updateEntity(entity);
-			} else if (exists(id * -1)) {
-				throw new EntityDeletedException(id);
-			} else {
+			E found = findOneIncludeLogicalDeleted(id);
+			if (found == null) {
 				sqlManager.insertEntity(entity);
+			} else if (found.getId() > 0) {
+				sqlManager.updateEntity(entity);
+			} else {
+				throw new EntityDeletedException(id);
 			}
+//			if (exists(id)) {
+//				sqlManager.updateEntity(entity);
+//			} else if (exists(id * -1)) {
+//				throw new EntityDeletedException(id);
+//			} else {
+//				sqlManager.insertEntity(entity);
+//			}
 		} catch (SQLRuntimeException e) {
 			throw getExceptionTranslator().translate("save", null, e.getCause());
 		}

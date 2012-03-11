@@ -10,6 +10,10 @@ SELECT *
 		/*IF id != null*/
 		AND id = /*id*/10
 		/*END*/
+
+		/*IF absid != null*/
+		AND ABS(id) = /*absid*/10
+		/*END*/
 	/*END*/
 
 	/*IF orders != null*/
