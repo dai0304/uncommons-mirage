@@ -16,6 +16,12 @@
  */
 package jp.xet.uncommons.mirage.spring.data;
 
+import java.util.Map;
+
+import jp.sf.amateras.mirage.exception.SQLRuntimeException;
+
+import org.apache.commons.lang.Validate;
+
 /**
  * Mirageフレームワークを利用した {@link LogicalDeleteJdbcRepository} の実装クラス。
  * 
@@ -43,53 +49,118 @@ public abstract class LogicalDeleteMirageRepository<E extends Identifiable> exte
 	
 	@Override
 	public void delete(E entity) {
-		executeUpdate(BASE_LOGICAL_DELETE, createParams(getId(entity)));
+		Validate.notNull(entity);
+		delete(entity.getId());
 	}
 	
 	@Override
 	public void delete(Long id) {
 		if (id > 0) {
-			executeUpdate(BASE_LOGICAL_DELETE, createParams(id));
+			try {
+				executeUpdate(BASE_LOGICAL_DELETE, createParams(id));
+			} catch (SQLRuntimeException e) {
+				throw getExceptionTranslator().translate("delete", null, e.getCause());
+			}
 		}
 	}
 	
 	@Override
 	public void deleteInBatch(Iterable<E> entities) {
 		// THINK これでいいのか…？
-		delete(entities);
+		try {
+			delete(entities);
+		} catch (SQLRuntimeException e) {
+			throw getExceptionTranslator().translate("deleteInBatch", null, e.getCause());
+		}
+	}
+	
+	@Override
+	public boolean exists(Long id) {
+		try {
+			Map<String, Object> params = createParams(id);
+			params.put("include_logical_deleted", true);
+			return getCount(getBaseSelectSqlResource(), params) > 0;
+		} catch (SQLRuntimeException e) {
+			throw getExceptionTranslator().translate("exists", null, e.getCause());
+		}
 	}
 	
 	@Override
 	public void physicalDelete(E entity) {
-		sqlManager.deleteEntity(entity);
+		try {
+			sqlManager.deleteEntity(entity);
+		} catch (SQLRuntimeException e) {
+			throw getExceptionTranslator().translate("physicalDelete", null, e.getCause());
+		}
 	}
 	
 	@Override
 	@SuppressWarnings("unchecked")
 	public void physicalDelete(Iterable<? extends E> entities) {
-		sqlManager.deleteBatch(entities);
+		try {
+			sqlManager.deleteBatch(entities);
+		} catch (SQLRuntimeException e) {
+			throw getExceptionTranslator().translate("physicalDelete", null, e.getCause());
+		}
 	}
 	
 	@Override
 	public void physicalDelete(Long id) {
-		sqlManager.deleteEntity(findOne(id));
+		try {
+			sqlManager.deleteEntity(findOne(id));
+		} catch (SQLRuntimeException e) {
+			throw getExceptionTranslator().translate("physicalDelete", null, e.getCause());
+		}
 	}
 	
 	@Override
 	public void physicalDeleteAll() {
-		sqlManager.deleteBatch(findAll());
+		try {
+			sqlManager.deleteBatch(findAll());
+		} catch (SQLRuntimeException e) {
+			throw getExceptionTranslator().translate("physicalDeleteAll", null, e.getCause());
+		}
 	}
 	
 	@Override
 	@SuppressWarnings("unchecked")
 	public void physicalDeleteInBatch(Iterable<E> entities) {
-		sqlManager.deleteBatch(entities);
+		try {
+			sqlManager.deleteBatch(entities);
+		} catch (SQLRuntimeException e) {
+			throw getExceptionTranslator().translate("physicalDeleteInBatch", null, e.getCause());
+		}
 	}
 	
 	@Override
 	public void revert(Long id) {
 		if (id < 0) {
-			executeUpdate(BASE_LOGICAL_DELETE, createParams(id));
+			try {
+				executeUpdate(BASE_LOGICAL_DELETE, createParams(id));
+			} catch (SQLRuntimeException e) {
+				throw getExceptionTranslator().translate("revert", null, e.getCause());
+			}
 		}
+	}
+	
+	@Override
+	public E save(E entity) {
+		if (entity == null) {
+			return null;
+		}
+		try {
+			long id = entity.getId();
+			
+			if (exists(id)) {
+				sqlManager.updateEntity(entity);
+			} else if (exists(id * -1)) {
+				throw new EntityDeletedException(id);
+			} else {
+				sqlManager.insertEntity(entity);
+			}
+		} catch (SQLRuntimeException e) {
+			throw getExceptionTranslator().translate("save", null, e.getCause());
+		}
+		return entity;
 	}
 }

@@ -94,8 +94,6 @@ public abstract class SimpleMirageRepository<E, ID extends Serializable> impleme
 	}
 	
 	
-	private SQLExceptionTranslator exceptionTranslator;
-	
 	@Autowired
 	SqlManager sqlManager;
 	
@@ -104,6 +102,8 @@ public abstract class SimpleMirageRepository<E, ID extends Serializable> impleme
 	
 	@Autowired(required = false)
 	DataSource dataSource;
+	
+	private transient SQLExceptionTranslator exceptionTranslator;
 	
 	private final Class<E> entityClass;
 	
@@ -201,11 +201,8 @@ public abstract class SimpleMirageRepository<E, ID extends Serializable> impleme
 			return new PageImpl<E>(findAll());
 		}
 		
-		Map<String, Object> params = createParams();
-		addPageParam(params, pageable);
-		
 		try {
-			List<E> result = getResultList(getBaseSelectSqlResource(), params);
+			List<E> result = getResultList(getBaseSelectSqlResource(), createParams(pageable));
 			return new PageImpl<E>(result, pageable, count());
 		} catch (SQLRuntimeException e) {
 			throw getExceptionTranslator().translate("findAll", null, e.getCause());
@@ -534,6 +531,17 @@ public abstract class SimpleMirageRepository<E, ID extends Serializable> impleme
 		}
 	}
 	
+	protected synchronized SQLExceptionTranslator getExceptionTranslator() {
+		if (this.exceptionTranslator == null) {
+			if (dataSource != null) {
+				this.exceptionTranslator = new SQLErrorCodeSQLExceptionTranslator(dataSource);
+			} else {
+				this.exceptionTranslator = new SQLStateSQLExceptionTranslator();
+			}
+		}
+		return this.exceptionTranslator;
+	}
+	
 	/**
 	 * @see SqlManager#getResultList(Class, String)
 	 */
@@ -794,16 +802,5 @@ public abstract class SimpleMirageRepository<E, ID extends Serializable> impleme
 		if (list.isEmpty() == false) {
 			params.put("orders", Joiner.on(", ").join(list));
 		}
-	}
-	
-	private synchronized SQLExceptionTranslator getExceptionTranslator() {
-		if (this.exceptionTranslator == null) {
-			if (dataSource != null) {
-				this.exceptionTranslator = new SQLErrorCodeSQLExceptionTranslator(dataSource);
-			} else {
-				this.exceptionTranslator = new SQLStateSQLExceptionTranslator();
-			}
-		}
-		return this.exceptionTranslator;
 	}
 }

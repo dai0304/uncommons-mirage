@@ -100,5 +100,4 @@ public interface LogicalDeleteJdbcRepository<E extends Identifiable> extends Jdb
 	 * @since 1.0
 	 */
 	void revert(Long id);
-	
 }
