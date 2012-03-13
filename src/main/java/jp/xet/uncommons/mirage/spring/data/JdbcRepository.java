@@ -19,7 +19,7 @@ package jp.xet.uncommons.mirage.spring.data;
 import java.io.Serializable;
 import java.util.List;
 
-import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -39,7 +39,7 @@ public interface JdbcRepository<E, ID extends Serializable> extends PagingAndSor
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @throws DataIntegrityViolationException 整合性違反が発生した場合
+	 * @throws DataAccessException データアクセスエラーが発生した場合
 	 * @throws IllegalArgumentException 引数に{@code null}を与えた場合
 	 * @since 1.0
 	 */
@@ -49,7 +49,7 @@ public interface JdbcRepository<E, ID extends Serializable> extends PagingAndSor
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @throws DataIntegrityViolationException 整合性違反が発生した場合
+	 * @throws DataAccessException データアクセスエラーが発生した場合
 	 * @since 1.0
 	 */
 	@Override
@@ -58,7 +58,7 @@ public interface JdbcRepository<E, ID extends Serializable> extends PagingAndSor
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @throws DataIntegrityViolationException 整合性違反が発生した場合
+	 * @throws DataAccessException データアクセスエラーが発生した場合
 	 * @throws IllegalArgumentException 引数に{@code null}を与えた場合
 	 * @since 1.0
 	 */
@@ -68,7 +68,7 @@ public interface JdbcRepository<E, ID extends Serializable> extends PagingAndSor
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @throws DataIntegrityViolationException 整合性違反が発生した場合
+	 * @throws DataAccessException データアクセスエラーが発生した場合
 	 * @since 1.0
 	 */
 	@Override
@@ -78,14 +78,24 @@ public interface JdbcRepository<E, ID extends Serializable> extends PagingAndSor
 	 * エンティティのバッチ削除を行う。
 	 * 
 	 * @param entities 削除するエンティティ
-	 * @throws DataIntegrityViolationException 整合性違反が発生した場合
+	 * @throws DataAccessException データアクセスエラーが発生した場合
 	 * @since 1.0
 	 */
 	void deleteInBatch(Iterable<E> entities);
 	
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @throws DataAccessException データアクセスエラーが発生した場合
+	 */
 	@Override
 	List<E> findAll();
 	
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @throws DataAccessException データアクセスエラーが発生した場合
+	 */
 	@Override
 	List<E> findAll(Sort sort);
 	
@@ -94,7 +104,7 @@ public interface JdbcRepository<E, ID extends Serializable> extends PagingAndSor
 	 * 
 	 * @param entity エンティティ
 	 * @return ID
-	 * @throws IllegalArgumentException 引数に{@code null}を与えた場合
+	 * @throws DataAccessException データアクセスエラーが発生した場合
 	 * @since 1.0
 	 */
 	ID getId(E entity);
@@ -104,7 +114,7 @@ public interface JdbcRepository<E, ID extends Serializable> extends PagingAndSor
 	 * 
 	 * <p>{@code entity}として{@code null}を渡した場合、何もせずに{@code null}を返す。</p>
 	 * 
-	 * @throws DataIntegrityViolationException 整合性違反が発生した場合
+	 * @throws DataAccessException データアクセスエラーが発生した場合
 	 * @since 1.0
 	 */
 	@Override
@@ -113,7 +123,7 @@ public interface JdbcRepository<E, ID extends Serializable> extends PagingAndSor
 	/**
 	 * {@inheritDoc}
 	 * 
-	 * @throws DataIntegrityViolationException 整合性違反が発生した場合
+	 * @throws DataAccessException データアクセスエラーが発生した場合
 	 * @since 1.0
 	 */
 	@Override
