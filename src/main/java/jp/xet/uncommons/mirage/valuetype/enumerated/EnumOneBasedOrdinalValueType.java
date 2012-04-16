@@ -70,6 +70,11 @@ public class EnumOneBasedOrdinalValueType implements ValueType<Object> {
 	}
 	
 	@Override
+	public Object getDefaultValue() {
+		return null;
+	}
+	
+	@Override
 	public Class<?> getJavaType(int sqlType) {
 		return Integer.class;
 	}

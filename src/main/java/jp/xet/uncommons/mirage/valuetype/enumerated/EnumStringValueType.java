@@ -74,6 +74,11 @@ public class EnumStringValueType implements ValueType<Object> {
 	}
 	
 	@Override
+	public Object getDefaultValue() {
+		return null;
+	}
+	
+	@Override
 	public Class<?> getJavaType(int sqlType) {
 		return String.class;
 	}
