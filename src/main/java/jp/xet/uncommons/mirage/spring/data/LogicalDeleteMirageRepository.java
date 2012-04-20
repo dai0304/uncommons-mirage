@@ -163,7 +163,10 @@ public abstract class LogicalDeleteMirageRepository<E extends Identifiable> exte
 		}
 		try {
 			long id = entity.getId();
-			E found = findOneIncludeLogicalDeleted(id);
+			E found = null;
+			if (id != 0) {
+				found = findOneIncludeLogicalDeleted(id);
+			}
 			if (found == null) {
 				sqlManager.insertEntity(entity);
 			} else if (found.getId() > 0) {
@@ -171,13 +174,6 @@ public abstract class LogicalDeleteMirageRepository<E extends Identifiable> exte
 			} else {
 				throw new EntityDeletedException(id);
 			}
-//			if (exists(id)) {
-//				sqlManager.updateEntity(entity);
-//			} else if (exists(id * -1)) {
-//				throw new EntityDeletedException(id);
-//			} else {
-//				sqlManager.insertEntity(entity);
-//			}
 		} catch (SQLRuntimeException e) {
 			throw getExceptionTranslator().translate("save", null, e.getCause());
 		}
