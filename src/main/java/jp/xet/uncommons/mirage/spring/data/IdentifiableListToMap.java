@@ -29,6 +29,7 @@ import com.google.common.collect.Maps;
  * @version $Id$
  * @author daisuke
  */
+@Deprecated
 public class IdentifiableListToMap<T extends Identifiable> implements Function<Collection<T>, Map<Long, T>> {
 	
 	@Override

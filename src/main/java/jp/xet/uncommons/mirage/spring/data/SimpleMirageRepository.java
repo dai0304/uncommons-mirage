@@ -56,6 +56,7 @@ import org.springframework.util.Assert;
  * @version $Id: SimpleMirageRepository.java 161 2011-10-21 10:08:21Z daisuke $
  * @author daisuke
  */
+@Deprecated
 public abstract class SimpleMirageRepository<E, ID extends Serializable> implements JdbcRepository<E, ID> {
 	
 	static final SqlResource BASE_SELECT_SQL = new SimpleSqlResource(SimpleMirageRepository.class, "baseSelect.sql");

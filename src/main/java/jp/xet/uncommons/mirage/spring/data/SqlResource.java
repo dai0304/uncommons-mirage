@@ -23,6 +23,7 @@ package jp.xet.uncommons.mirage.spring.data;
  * @version $Id$
  * @author daisuke
  */
+@Deprecated
 public interface SqlResource {
 	
 	String getAbsolutePath();

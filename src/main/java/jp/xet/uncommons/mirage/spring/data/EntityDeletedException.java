@@ -25,6 +25,7 @@ import org.springframework.dao.DataAccessException;
  * @version $Id$
  * @author daisuke
  */
+@Deprecated
 @SuppressWarnings("serial")
 public class EntityDeletedException extends DataAccessException {
 	

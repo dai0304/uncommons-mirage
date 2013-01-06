@@ -30,6 +30,7 @@ import org.apache.commons.lang.Validate;
  * @version $Id$
  * @author daisuke
  */
+@Deprecated
 public abstract class LogicalDeleteMirageRepository<E extends Identifiable> extends IdentifiableMirageRepository<E>
 		implements LogicalDeleteJdbcRepository<E> {
 	

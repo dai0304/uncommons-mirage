@@ -33,6 +33,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  * @version $Id: MirageRepository.java 161 2011-10-21 10:08:21Z daisuke $
  * @author daisuke
  */
+@Deprecated
 @NoRepositoryBean
 public interface JdbcRepository<E, ID extends Serializable> extends PagingAndSortingRepository<E, ID> {
 	

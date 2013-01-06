@@ -30,6 +30,7 @@ import org.apache.commons.lang.Validate;
  * @version $Id$
  * @author daisuke
  */
+@Deprecated
 public class SimpleSqlResource implements SqlResource {
 	
 	static String toAbsolutePath(final String packageName, final String relativePath) {

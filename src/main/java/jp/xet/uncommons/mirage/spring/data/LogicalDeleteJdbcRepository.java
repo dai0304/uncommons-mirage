@@ -40,6 +40,7 @@ import org.springframework.data.repository.NoRepositoryBean;
  * @author daisuke
  * @see <a href="http://bit.ly/qQtt9T">削除フラグのはなし</a>
  */
+@Deprecated
 @NoRepositoryBean
 public interface LogicalDeleteJdbcRepository<E extends Identifiable> extends JdbcRepository<E, Long> {
 	

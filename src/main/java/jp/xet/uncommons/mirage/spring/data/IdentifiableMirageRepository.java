@@ -26,6 +26,7 @@ import org.springframework.util.Assert;
  * @version $Id$
  * @author daisuke
  */
+@Deprecated
 public abstract class IdentifiableMirageRepository<E extends Identifiable> extends SimpleMirageRepository<E, Long> {
 	
 	/**
