@@ -26,6 +26,7 @@ import java.util.regex.Pattern;
  * @author Anthony Eden
  * @see <a href="http://code.google.com/p/rogueweb/">rogueweb</a>
  */
+@Deprecated
 public class Inflection {
 	
 	private static final List<Inflection> PLURAL = new ArrayList<Inflection>();

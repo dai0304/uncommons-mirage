@@ -22,7 +22,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 import jp.xet.uncommons.mirage.spring.data.example.Entity;
-import jp.xet.uncommons.mirage.spring.data.example.EntityRepositoryImpl;
+import jp.xet.uncommons.mirage.spring.data.example.EntityRepository;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,6 +33,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+@Deprecated
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:/test-context.xml")
 @Transactional
@@ -42,7 +43,7 @@ public class SimpleLogicalDeleteMirageRepositoryTest {
 	private static Logger logger = LoggerFactory.getLogger(SimpleLogicalDeleteMirageRepositoryTest.class);
 	
 	@Autowired
-	EntityRepositoryImpl repos;
+	EntityRepository repos;
 	
 	
 	@Test

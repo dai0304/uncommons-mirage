@@ -27,6 +27,7 @@ import org.springframework.stereotype.Repository;
  * @version $Id$
  * @author daisuke
  */
+@Deprecated
 @Repository
 public class EntityRepositoryImpl extends LogicalDeleteMirageRepository<Entity> implements EntityRepository {
 	
