@@ -25,8 +25,6 @@ import java.sql.Types;
 import jp.sf.amateras.mirage.type.ValueType;
 import jp.xet.uncommons.mirage.valuetype.enumerated.Enumerated.EnumType;
 
-import org.springframework.core.annotation.AnnotationUtils;
-
 /**
  * {@link Enum}型をordinal+1の {@code int}型としてDBに保存するための {@link ValueType}実装クラス。
  * 
